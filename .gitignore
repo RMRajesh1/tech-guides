@@ -404,6 +404,11 @@ FodyWeavers.xsd
 !.vscode/extensions.json
 !.vscode/*.code-snippets
 
+# JetBrains IDEs (IntelliJ, Rider, etc.)
+.idea/
+*.iws
+out/
+
 # Local History for Visual Studio Code
 .history/
 
@@ -416,3 +421,6 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# Miscellaneous
+.DS_Store
