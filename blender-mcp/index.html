@@ -1,0 +1,2160 @@
+<!DOCTYPE html>
+<html lang="en" data-os="mac">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<!-- ─── PRIMARY META ─── -->
+<title>BlenderMCP Setup Guide — Connect Blender to Claude, Cursor & Codex via MCP</title>
+<meta name="description" content="Complete step-by-step setup guide for BlenderMCP v1.5.5. Connect Blender to any AI assistant (Claude, Cursor, VS Code, Codex) via the Model Context Protocol on macOS, Windows, and Linux.">
+<meta name="keywords" content="BlenderMCP, Blender MCP, Model Context Protocol, Blender AI, Claude Blender, Cursor Blender, Blender automation, AI 3D modeling, blender-mcp, MCP server, Blender addon">
+<meta name="author" content="Siddharth Ahuja (@sidahuj)">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#07070f">
+<link rel="canonical" href="https://github.com/ahujasid/blender-mcp">
+
+<!-- ─── OPEN GRAPH ─── -->
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="BlenderMCP Guide">
+<meta property="og:title" content="BlenderMCP Setup Guide — Connect Blender to AI via MCP">
+<meta property="og:description" content="Step-by-step guide to connect Blender to Claude, Cursor, VS Code, and Codex using the Model Context Protocol. Covers macOS, Windows, and Linux. Python 3.12 required.">
+<meta property="og:url" content="https://github.com/ahujasid/blender-mcp">
+<meta property="og:image" content="https://opengraph.githubassets.com/1/ahujasid/blender-mcp">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="https://x.com/sidahuj">
+<meta property="article:section" content="Technology">
+<meta property="article:tag" content="Blender,MCP,AI,3D,Claude,Cursor">
+
+<!-- ─── TWITTER / X CARD ─── -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@sidahuj">
+<meta name="twitter:creator" content="@sidahuj">
+<meta name="twitter:title" content="BlenderMCP Setup Guide — Connect Blender to AI via MCP">
+<meta name="twitter:description" content="Complete setup guide for BlenderMCP. Connect Blender to Claude, Cursor, VS Code and Codex via Model Context Protocol on macOS, Windows, and Linux.">
+<meta name="twitter:image" content="https://opengraph.githubassets.com/1/ahujasid/blender-mcp">
+
+<!-- ─── STRUCTURED DATA (JSON-LD) ─── -->
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "TechArticle",
+   "@id": "https://github.com/ahujasid/blender-mcp#guide",
+   "headline": "BlenderMCP Setup Guide — Connect Blender to AI via Model Context Protocol",
+   "description": "Complete step-by-step setup guide for BlenderMCP v1.5.5. Connect Blender to Claude, Cursor, VS Code, or Codex via MCP on macOS, Windows, and Linux.",
+   "author": {
+    "@type": "Person",
+    "name": "Siddharth Ahuja",
+    "url": "https://x.com/sidahuj"
+   },
+   "publisher": {
+    "@type": "Organization",
+    "name": "BlenderMCP",
+    "url": "https://github.com/ahujasid/blender-mcp"
+   },
+   "inLanguage": "en-US",
+   "keywords": "BlenderMCP, Blender, MCP, Model Context Protocol, AI, Claude, Cursor, VS Code, Codex",
+   "proficiencyLevel": "Beginner",
+   "operatingSystem": "macOS, Windows, Linux",
+   "applicationCategory": "3D Graphics",
+   "softwareVersion": "1.5.5"
+  },
+  {
+   "@type": "HowTo",
+   "@id": "https://github.com/ahujasid/blender-mcp#howto",
+   "name": "How to Set Up BlenderMCP",
+   "description": "Connect Blender to an AI assistant via the Model Context Protocol",
+   "totalTime": "PT15M",
+   "tool": [
+    {"@type": "HowToTool", "name": "Blender 3.0+"},
+    {"@type": "HowToTool", "name": "Python 3.12"},
+    {"@type": "HowToTool", "name": "uv package manager"},
+    {"@type": "HowToTool", "name": "Claude Desktop, Cursor, VS Code, or Codex"}
+   ],
+   "step": [
+    {"@type": "HowToStep", "position": 1, "name": "Install uv", "text": "Install the uv package manager: brew install uv (macOS), or the PowerShell installer for Windows."},
+    {"@type": "HowToStep", "position": 2, "name": "Install Blender Addon", "text": "Download addon.py from the GitHub repo root and install it via Blender Preferences > Add-ons."},
+    {"@type": "HowToStep", "position": 3, "name": "Connect in Blender", "text": "Press N in the 3D Viewport, find the BlenderMCP tab, and click 'Connect to Claude'."},
+    {"@type": "HowToStep", "position": 4, "name": "Configure AI Client", "text": "Add blender-mcp to your AI client's MCP config file and restart the client."}
+   ]
+  },
+  {
+   "@type": "SoftwareApplication",
+   "name": "BlenderMCP",
+   "description": "Model Context Protocol integration for Blender, enabling AI assistants to directly control Blender scenes.",
+   "applicationCategory": "DeveloperApplication",
+   "operatingSystem": "macOS, Windows, Linux",
+   "softwareVersion": "1.5.5",
+   "license": "https://opensource.org/licenses/MIT",
+   "url": "https://github.com/ahujasid/blender-mcp",
+   "author": {"@type": "Person", "name": "Siddharth Ahuja"},
+   "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}
+  }
+ ]
+}
+</script>
+
+<!-- ─── PRECONNECT ─── -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────────
+  TOKENS
+───────────────────────────────────────────── */
+:root{
+ --bg:  #07070f;
+ --bg2:  #0d0d1a;
+ --bg3:  #111120;
+ --bg4:  #171728;
+ --bg5:  #1d1d32;
+ --border:#1e1e32;
+ --border2:#2a2a46;
+ --or:  #f97316;
+ --or2:  rgba(249,115,22,.12);
+ --teal: #14b8a6;
+ --rose: #f43f5e;
+ --blue: #3b82f6;
+ --purple:#8b5cf6;
+ --green: #22c55e;
+ --amber: #f59e0b;
+ --text: #eeeef8;
+ --text2: #9494bc;
+ --text3: #4e4e72;
+ --sw:  260px;
+ --header:52px;
+ --radius:4px;
+ --transition:.22s cubic-bezier(.4,0,.2,1);
+}
+
+/* ─────────────────────────────────────────────
+  RESET & BASE
+───────────────────────────────────────────── */
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--header) + 16px);-webkit-text-size-adjust:100%;}
+body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;font-size:15px;line-height:1.7;overflow-x:hidden;}
+a{color:var(--teal);text-decoration:none;}
+a:hover{text-decoration:underline;}
+strong{color:var(--text);font-weight:600;}
+ul,ol{padding-left:1.4em;}
+li{color:var(--text2);margin-bottom:3px;}
+p{color:var(--text2);margin-bottom:10px;}
+p:last-child{margin-bottom:0;}
+p code,li code,td code,span code{font-family:'JetBrains Mono',monospace;font-size:.78em;color:var(--or);background:rgba(249,115,22,.1);padding:1px 5px;border-radius:2px;}
+
+/* ─────────────────────────────────────────────
+  LAYOUT GRID
+───────────────────────────────────────────── */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+.skip-link{
+  position:fixed;top:-100px;left:50%;transform:translateX(-50%);
+  background:var(--or);color:#000;padding:8px 20px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;
+  z-index:9999;transition:top .15s;text-decoration:none;
+}
+.skip-link:focus{top:8px;}
+#app{display:flex;min-height:100vh;padding-top:var(--header);}
+#sidebar{
+ width:var(--sw);flex-shrink:0;
+ background:var(--bg2);border-right:1px solid var(--border);
+ position:fixed;top:var(--header);left:0;bottom:0;
+ overflow-y:auto;overflow-x:hidden;z-index:100;
+ display:flex;flex-direction:column;
+ transition:transform var(--transition),box-shadow var(--transition);
+}
+#sidebar::-webkit-scrollbar{width:3px;}
+#sidebar::-webkit-scrollbar-thumb{background:var(--border2);}
+
+#main{
+ margin-left:var(--sw);
+ flex:1;min-width:0;
+ padding-bottom:100px;
+ transition:margin-left var(--transition);
+}
+
+/* ── Sidebar collapsed (desktop) ── */
+body.nav-collapsed #sidebar{transform:translateX(calc(-1 * var(--sw)));box-shadow:none;}
+body.nav-collapsed #main{margin-left:0;}
+body.nav-collapsed .tb-logo{width:auto;}
+body.nav-collapsed .tb-toggle-icon{transform:rotate(180deg);}
+
+/* ── Sidebar open (mobile drawer) ── */
+body.sidebar-open #sidebar{transform:translateX(0)!important;box-shadow:0 0 40px rgba(0,0,0,.6);}
+body.sidebar-open #sidebar-overlay{display:block;}
+
+/* ─────────────────────────────────────────────
+  STICKY HEADER
+───────────────────────────────────────────── */
+#topbar{
+ position:fixed;top:0;left:0;right:0;height:var(--header);z-index:200;
+ background:rgba(7,7,15,.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+ border-bottom:1px solid var(--border);
+ display:grid;grid-template-columns:var(--sw) 1fr auto;
+ align-items:stretch;transition:grid-template-columns var(--transition);
+}
+body.nav-collapsed #topbar{grid-template-columns:auto 1fr auto;}
+
+.tb-logo{
+ display:flex;align-items:center;gap:10px;padding:0 16px;
+ border-right:1px solid var(--border);
+ overflow:hidden;transition:padding var(--transition);
+}
+body.nav-collapsed .tb-logo{border-right:none;padding:0 12px;}
+
+/* sidebar toggle button */
+.tb-toggle{
+ width:32px;height:32px;display:grid;place-items:center;flex-shrink:0;
+ background:var(--bg3);border:1px solid var(--border);cursor:pointer;
+ color:var(--text2);transition:background .14s,color .14s;border-radius:3px;
+}
+.tb-toggle:hover{background:var(--bg4);color:var(--text);}
+.tb-toggle-icon{transition:transform var(--transition);}
+
+.tb-cube{width:24px;height:24px;background:var(--or);display:grid;place-items:center;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#000;flex-shrink:0;}
+.tb-name{font-size:13px;font-weight:700;letter-spacing:.02em;white-space:nowrap;overflow:hidden;transition:opacity var(--transition);}
+.tb-name span{color:var(--or);}
+
+.tb-center{display:flex;align-items:center;justify-content:center;padding:0 16px;}
+
+/* ── OS SELECTOR ── */
+.os-selector-wrap{display:flex;flex-direction:column;align-items:center;gap:3px;}
+.os-selector-label{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:2.5px;text-transform:uppercase;color:var(--text3);}
+.os-selector{display:flex;gap:0;background:var(--bg3);border:1px solid var(--border);}
+.os-btn{
+ display:flex;align-items:center;justify-content:center;gap:7px;
+ font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.04em;
+ padding:6px 14px;cursor:pointer;color:var(--text3);
+ border:none;border-right:1px solid var(--border);
+ background:transparent;
+ transition:background .14s,color .14s;white-space:nowrap;position:relative;
+ outline:none;
+}
+.os-btn:last-child{border-right:none;}
+.os-btn:focus-visible{outline:2px solid var(--or);outline-offset:-2px;z-index:1;}
+.os-btn:hover{background:var(--bg4);color:var(--text2);}
+.os-btn.active{background:var(--bg5);color:var(--text);}
+.os-btn.active.mac{color:var(--teal);}
+.os-btn.active.win{color:#0ea5e9;}
+.os-btn.active.linux{color:var(--or);}
+/* active underline indicator */
+.os-btn::after{
+ content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+ background:currentColor;opacity:0;transition:opacity .14s;
+}
+.os-btn.active::after{opacity:1;}
+
+.os-icon{width:15px;height:15px;flex-shrink:0;display:block;}
+.os-label{display:none;}
+
+.tb-right{
+ display:flex;align-items:center;gap:8px;padding:0 16px;
+ border-left:1px solid var(--border);
+}
+.gh-link{
+ display:flex;align-items:center;gap:6px;
+ font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.5px;
+ color:var(--text3);border:1px solid var(--border);
+ padding:5px 10px;transition:all .14s;white-space:nowrap;
+}
+.gh-link:hover{color:var(--text);border-color:var(--border2);background:var(--bg3);text-decoration:none;}
+.gh-link svg{flex-shrink:0;}
+
+/* ─────────────────────────────────────────────
+  SIDEBAR NAV
+───────────────────────────────────────────── */
+.slogo-area{padding:16px 18px 12px;border-bottom:1px solid var(--border);}
+.sver{display:inline-flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);color:var(--green);padding:2px 8px;margin-top:5px;}
+.nsec{padding:12px 0 4px;}
+.nlabel{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);padding:0 18px;margin-bottom:3px;}
+.ni{
+ display:flex;align-items:center;gap:7px;
+ padding:6px 18px;font-size:12.5px;color:var(--text2);text-decoration:none;
+ border-left:2px solid transparent;transition:all .14s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.ni:hover{color:var(--text);background:rgba(255,255,255,.028);text-decoration:none;}
+.ni.active{color:var(--or);border-left-color:var(--or);background:var(--or2);}
+.ni.sub{padding-left:32px;font-size:12px;color:var(--text3);}
+.ni.sub:hover{color:var(--text2);}
+.ni.sub.active{color:var(--or);}
+.ni .badge{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:.5px;padding:1px 5px;background:rgba(249,115,22,.12);border:1px solid rgba(249,115,22,.25);color:var(--or);flex-shrink:0;}
+.sfooter{padding:14px 18px;border-top:1px solid var(--border);margin-top:auto;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);line-height:1.7;}
+.sfooter a{color:var(--teal);}
+
+/* ─────────────────────────────────────────────
+  MOBILE OVERLAY BACKDROP
+───────────────────────────────────────────── */
+#sidebar-overlay{
+ display:none;position:fixed;inset:0;z-index:99;
+ background:rgba(0,0,0,.6);backdrop-filter:blur(2px);
+}
+
+/* ─────────────────────────────────────────────
+  PAGE BODY CONTENT
+───────────────────────────────────────────── */
+.disclaimer{
+ background:rgba(244,63,94,.06);border-bottom:1px solid rgba(244,63,94,.2);
+ border-left:3px solid var(--rose);padding:10px 32px;
+ display:flex;gap:10px;align-items:flex-start;font-size:12.5px;
+}
+.disclaimer strong{color:var(--rose);}
+.disclaimer p{color:#fca5a5;margin:0;}
+
+/* HERO */
+.hero{position:relative;padding:48px 32px 40px;border-bottom:1px solid var(--border);overflow:hidden;}
+.hbg{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:36px 36px;opacity:.18;-webkit-mask-image:radial-gradient(ellipse 80% 100% at 60% 0%,black 0%,transparent 100%);mask-image:radial-gradient(ellipse 80% 100% at 60% 0%,black 0%,transparent 100%);}
+.hglow{position:absolute;width:500px;height:300px;background:radial-gradient(ellipse,rgba(249,115,22,.09) 0%,transparent 70%);top:-60px;right:-40px;pointer-events:none;}
+.hero-inner{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap;}
+.hero-text{flex:1;min-width:240px;}
+.h-eyebrow{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--or);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.h-eyebrow::before{content:'';width:18px;height:1px;background:var(--or);}
+h1{font-size:clamp(28px,4.5vw,52px);font-weight:800;letter-spacing:-1.5px;line-height:.95;margin-bottom:12px;}
+h1 em{font-style:normal;color:var(--or);}
+.h-desc{font-size:15px;color:var(--text2);font-weight:400;max-width:480px;margin-bottom:18px;}
+.htags{display:flex;flex-wrap:wrap;gap:6px;}
+.htag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;padding:3px 9px;border:1px solid var(--border2);color:var(--text3);}
+.htag.hl{border-color:rgba(249,115,22,.4);color:var(--or);}
+.htag.danger{border-color:rgba(244,63,94,.3);color:var(--rose);}
+
+/* QUICK START */
+.qs{background:linear-gradient(135deg,rgba(249,115,22,.06) 0%,rgba(20,184,166,.04) 100%);border:1px solid rgba(249,115,22,.25);margin:28px 32px;overflow:hidden;}
+.qs-header{padding:16px 20px 14px;border-bottom:1px solid rgba(249,115,22,.2);display:flex;align-items:center;gap:12px;}
+.qs-icon{width:32px;height:32px;background:var(--or);display:grid;place-items:center;font-size:16px;flex-shrink:0;}
+.qs-title{font-size:16px;font-weight:700;}
+.qs-sub{font-size:11px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-top:1px;}
+.qs-body{padding:20px;}
+.qs-steps{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:16px;}
+.qss{background:var(--bg3);border:1px solid var(--border);padding:14px;display:flex;gap:12px;align-items:flex-start;}
+.qss-num{width:22px;height:22px;background:var(--or);color:#000;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;display:grid;place-items:center;flex-shrink:0;margin-top:1px;}
+.qss-title{font-size:13px;font-weight:700;margin-bottom:4px;}
+.qss-desc{font-size:11.5px;color:var(--text3);}
+.qss-link{font-size:11px;color:var(--teal);font-family:'JetBrains Mono',monospace;margin-top:5px;display:inline-block;}
+.qs-note{font-size:12px;color:var(--text3);font-family:'JetBrains Mono',monospace;padding:10px 14px;background:rgba(0,0,0,.2);border:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+.qs-note::before{content:'ℹ';color:var(--teal);font-size:13px;}
+
+/* ─────────────────────────────────────────────
+  CONTENT SECTIONS
+───────────────────────────────────────────── */
+.content{padding:8px 32px 0;}
+.section{margin-bottom:64px;}
+.srule{height:1px;background:var(--border);margin-bottom:36px;}
+
+.seyebrow{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.seyebrow .num{color:var(--or);border:1px solid rgba(249,115,22,.4);padding:1px 6px;font-size:8.5px;}
+
+h2{font-size:22px;font-weight:800;letter-spacing:-.5px;line-height:1.15;margin-bottom:14px;}
+h2 .ac{color:var(--or);}
+h3{font-size:14px;font-weight:700;color:var(--text);margin:24px 0 8px;display:flex;align-items:center;gap:8px;}
+h3::before{content:'';display:inline-block;width:3px;height:13px;background:var(--teal);flex-shrink:0;}
+h4{font-size:10.5px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--text2);margin:14px 0 6px;text-transform:uppercase;letter-spacing:1px;}
+
+/* ─────────────────────────────────────────────
+  OS-AWARE CONTENT BLOCKS
+  body[data-os="mac"] hides win/linux, etc.
+───────────────────────────────────────────── */
+html[data-os="mac"] .os-win,
+html[data-os="mac"] .os-linux { display:none !important; }
+html[data-os="win"] .os-mac,
+html[data-os="win"] .os-linux { display:none !important; }
+html[data-os="linux"] .os-mac,
+html[data-os="linux"] .os-win { display:none !important; }
+
+/* OS block labels */
+.os-block{margin:10px 0;}
+.os-tag{display:inline-flex;align-items:center;gap:5px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:2px 8px;margin-bottom:6px;}
+.os-mac .os-tag{background:rgba(20,184,166,.08);border:1px solid rgba(20,184,166,.3);color:var(--teal);}
+.os-win .os-tag{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.3);color:#0ea5e9;}
+.os-linux .os-tag{background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.3);color:var(--or);}
+.os-tag svg{vertical-align:middle;margin-bottom:1px;}
+
+/* ─────────────────────────────────────────────
+  VERSION BADGE
+───────────────────────────────────────────── */
+.vbadge{display:inline-flex;align-items:center;gap:7px;background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.25);padding:4px 11px;margin-bottom:14px;}
+.vbadge span{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);}
+.vbadge strong{color:var(--green);font-size:11px;}
+
+/* ─────────────────────────────────────────────
+  CALLOUTS
+───────────────────────────────────────────── */
+.call{border:1px solid;padding:10px 14px;margin:10px 0;display:flex;gap:9px;font-size:12.5px;line-height:1.6;border-radius:var(--radius);}
+.call.warn {border-color:rgba(249,115,22,.35);background:rgba(249,115,22,.05);color:#fed7aa;}
+.call.info {border-color:rgba(59,130,246,.35);background:rgba(59,130,246,.05);color:#93c5fd;}
+.call.tip  {border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.05);color:#86efac;}
+.call.danger{border-color:rgba(244,63,94,.35);background:rgba(244,63,94,.05);color:#fda4af;}
+.cicon{font-size:13px;flex-shrink:0;margin-top:1px;}
+.call p{color:inherit;margin:0;}
+
+/* ─────────────────────────────────────────────
+  TABLES
+───────────────────────────────────────────── */
+.tw{overflow-x:auto;margin:10px 0 18px;-webkit-overflow-scrolling:touch;}
+table{width:100%;border-collapse:collapse;font-size:12.5px;}
+th{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;text-align:left;color:var(--text3);border-bottom:1px solid var(--border2);padding:7px 10px;white-space:nowrap;}
+td{padding:8px 10px;border-bottom:1px solid var(--border);color:var(--text2);word-break:break-word;overflow-wrap:anywhere;}
+tr:hover td{background:rgba(255,255,255,.01);}
+
+/* ─────────────────────────────────────────────
+  CODE BLOCKS
+───────────────────────────────────────────── */
+.cb{background:var(--bg3);border:1px solid var(--border);border-left:3px solid var(--or);margin:8px 0 16px;overflow:hidden;position:relative;}
+.cb.teal {border-left-color:var(--teal);}
+.cb.blue {border-left-color:var(--blue);}
+.cb.green {border-left-color:var(--green);}
+.cb.rose {border-left-color:var(--rose);}
+.cb.purple{border-left-color:var(--purple);}
+.cb.amber {border-left-color:var(--amber);}
+.cbh{display:flex;align-items:center;justify-content:space-between;padding:5px 12px;border-bottom:1px solid var(--border);background:rgba(0,0,0,.25);}
+.cbf{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);}
+.cbl{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;padding:2px 6px;background:var(--border);color:var(--text3);}
+pre{padding:12px 16px;overflow-x:auto;background:transparent;border:none;-webkit-overflow-scrolling:touch;}
+pre::-webkit-scrollbar{height:3px;}
+pre::-webkit-scrollbar-thumb{background:var(--border2);}
+code{font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.75;color:#c8d3f5;}
+.cc{color:#38384e;}.cs{color:#c3e88d;}.ck{color:var(--or);}.cv{color:#89ddff;}.co{color:var(--teal);}.cn{color:#f78c6c;}.cw{color:#c792ea;}.cf{color:#82aaff;}
+
+/* Copy button */
+.cb-copy{
+ position:absolute;top:7px;right:8px;
+ display:flex;align-items:center;gap:4px;
+ background:var(--bg5);border:1px solid var(--border2);
+ color:var(--text3);font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.5px;
+ padding:3px 8px;cursor:pointer;
+ opacity:0;transition:opacity .15s,color .15s,border-color .15s;z-index:5;
+}
+.cb:hover .cb-copy,.term:hover .cb-copy{opacity:1;}
+.cb-copy:hover{color:var(--or);border-color:rgba(249,115,22,.4);}
+.cb-copy.copied{color:var(--green);border-color:rgba(34,197,94,.4);opacity:1;}
+
+/* ─────────────────────────────────────────────
+  TERMINAL BLOCKS
+───────────────────────────────────────────── */
+.term{background:#04040c;border:1px solid var(--border);margin:8px 0 16px;overflow:hidden;position:relative;}
+.tbar{padding:6px 11px;background:#08080f;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:5px;}
+.td{width:8px;height:8px;border-radius:50%;}
+.td.r{background:#ff5f57;}.td.y{background:#febc2e;}.td.g{background:#28c840;}
+.ttitle{margin-left:5px;font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--text3);flex:1;text-align:center;}
+.term pre{padding:12px 15px;color:#9ab8a6;}
+.tp{color:var(--green);}.tc{color:#e8e8f0;}.tout{color:#587060;}.tok{color:var(--green);}.terr{color:var(--rose);}.twarn{color:var(--or);}.tinfo{color:var(--teal);}
+.term .cb-copy{top:6px;right:8px;}
+
+/* ─────────────────────────────────────────────
+  STEPS
+───────────────────────────────────────────── */
+.steps{margin:14px 0;}
+.step{display:flex;gap:12px;margin-bottom:20px;position:relative;}
+.step:not(:last-child)::after{content:'';position:absolute;left:11px;top:26px;bottom:-4px;width:1px;background:var(--border2);}
+.snum{width:24px;height:24px;background:var(--or);color:#000;font-weight:700;font-family:'JetBrains Mono',monospace;font-size:10px;display:grid;place-items:center;flex-shrink:0;margin-top:2px;position:relative;z-index:1;}
+.snum.t{background:var(--teal);color:#000;}.snum.b{background:var(--blue);color:#fff;}.snum.g{background:var(--green);color:#000;}.snum.a{background:var(--amber);color:#000;}
+.sbody{flex:1;min-width:0;}
+.stitle{font-weight:700;font-size:13px;margin-bottom:4px;}
+.sbody p{margin-bottom:6px;}
+
+/* ─────────────────────────────────────────────
+  PLATFORM HEADER (client section)
+───────────────────────────────────────────── */
+.phead{display:flex;align-items:center;gap:11px;padding:14px 16px;background:var(--bg3);border:1px solid var(--border);margin-bottom:18px;flex-wrap:wrap;}
+.picon{width:38px;height:38px;display:grid;place-items:center;font-size:18px;background:var(--bg2);border:1px solid var(--border2);flex-shrink:0;}
+.pname{font-size:15px;font-weight:800;}
+.psub{font-size:10px;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-top:1px;}
+.pbadge{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:1px;padding:3px 8px;color:var(--green);border:1px solid rgba(34,197,94,.3);background:rgba(34,197,94,.07);}
+
+/* ─────────────────────────────────────────────
+  CONFIG FILE DISPLAY
+───────────────────────────────────────────── */
+.cfile{background:var(--bg);border:1px solid var(--border);margin:10px 0 18px;overflow:hidden;}
+.cfh{display:flex;align-items:center;gap:7px;padding:6px 12px;background:var(--bg3);border-bottom:1px solid var(--border);}
+.cfpath{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.cftag{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1px;padding:2px 6px;background:var(--border2);color:var(--text3);flex-shrink:0;}
+
+/* ─────────────────────────────────────────────
+  ARCHITECTURE DIAGRAM
+───────────────────────────────────────────── */
+.arch{background:var(--bg3);border:1px solid var(--border);padding:20px;margin:16px 0;position:relative;overflow:hidden;}
+.arch::before{content:'ARCHITECTURE';position:absolute;top:9px;right:11px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;color:var(--text3);}
+.arch-row{display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap;row-gap:10px;}
+.ab{background:var(--bg2);border:1px solid var(--border2);padding:10px 13px;text-align:center;min-width:90px;}
+.ab .abi{font-size:16px;display:block;margin-bottom:2px;}
+.ab .abt{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:var(--text);}
+.ab .abs{font-size:8.5px;color:var(--text3);margin-top:1px;}
+.ab.hl{border-color:var(--or);background:var(--or2);}
+.ab.hl .abt{color:var(--or);}
+.arr{display:flex;flex-direction:column;align-items:center;padding:0 4px;}
+.arrline{display:flex;align-items:center;}
+.arrd{width:14px;height:1px;background:var(--border2);}
+.arrh{color:var(--text3);font-size:10px;line-height:1;}
+.arrl{font-size:8px;color:var(--text3);white-space:nowrap;font-family:'JetBrains Mono',monospace;text-align:center;margin-top:2px;}
+.arch-note{margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:10.5px;color:var(--text3);font-family:'JetBrains Mono',monospace;text-align:center;}
+
+/* ─────────────────────────────────────────────
+  FEATURE + TOOL GRIDS
+───────────────────────────────────────────── */
+.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin:12px 0 18px;}
+.fi{background:var(--bg3);border:1px solid var(--border);padding:11px 13px;border-left:3px solid var(--border);}
+.fi.o{border-left-color:var(--or);}.fi.t{border-left-color:var(--teal);}.fi.b{border-left-color:var(--blue);}.fi.g{border-left-color:var(--green);}.fi.p{border-left-color:var(--purple);}.fi.r{border-left-color:var(--rose);}
+.fin{font-weight:700;font-size:12.5px;margin-bottom:2px;}
+.fid{font-size:11px;color:var(--text3);}
+
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:7px;margin:10px 0 18px;}
+.ti{background:var(--bg3);border:1px solid var(--border);padding:9px 12px;transition:border-color .15s;}
+.ti:hover{border-color:var(--teal);}
+.tin{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:var(--teal);margin-bottom:2px;}
+.tid{font-size:10.5px;color:var(--text3);}
+
+/* ─────────────────────────────────────────────
+  STATUS DOTS
+───────────────────────────────────────────── */
+.srow{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0;}
+.sit{display:flex;align-items:center;gap:6px;padding:6px 11px;background:var(--bg3);border:1px solid var(--border);font-size:12px;}
+.sdot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.sdot.g{background:var(--green);box-shadow:0 0 5px var(--green);animation:pulse 2s infinite;}
+.sdot.a{background:var(--or);}.sdot.r{background:var(--rose);}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+/* ─────────────────────────────────────────────
+  ENV VARS
+───────────────────────────────────────────── */
+.env-row{display:flex;gap:8px;margin-bottom:7px;align-items:flex-start;flex-wrap:wrap;}
+.env-key{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--or);background:rgba(249,115,22,.08);padding:2px 8px;white-space:nowrap;flex-shrink:0;}
+.env-val{font-size:12px;color:var(--text2);}
+
+/* ─────────────────────────────────────────────
+  WORKFLOW CARDS
+───────────────────────────────────────────── */
+.wf{background:var(--bg3);border:1px solid var(--border);margin:18px 0;overflow:hidden;}
+.wfh{padding:12px 18px;background:rgba(0,0,0,.2);border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
+.wfn{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--border2);line-height:1;flex-shrink:0;margin-top:2px;}
+.wft{font-size:14px;font-weight:700;margin-bottom:2px;}
+.wfd{font-size:11px;color:var(--text2);}
+.wfb{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;padding:2px 7px;border:1px solid;flex-shrink:0;margin-top:2px;}
+.wfb.a{border-color:var(--or);color:var(--or);}.wfb.t{border-color:var(--teal);color:var(--teal);}.wfb.b{border-color:var(--blue);color:var(--blue);}.wfb.g{border-color:var(--green);color:var(--green);}
+.wfbody{padding:14px 18px;}
+.pbox{background:rgba(249,115,22,.05);border:1px solid rgba(249,115,22,.18);padding:10px 13px;margin:8px 0;}
+.plabel{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:var(--or);margin-bottom:5px;}
+.ptext{font-size:12.5px;color:var(--text);font-style:italic;}
+.rbox{background:rgba(34,197,94,.04);border:1px solid rgba(34,197,94,.18);padding:10px 13px;margin:8px 0;}
+.rlabel{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:5px;}
+.rtext{font-size:12px;color:#9ebca4;}
+.rtext ul{padding-left:16px;}
+.rtext li{margin-bottom:3px;}
+
+/* ─────────────────────────────────────────────
+  ACCORDION (TROUBLESHOOTING)
+───────────────────────────────────────────── */
+.issue{border:1px solid var(--border);margin-bottom:8px;overflow:hidden;}
+.issueh{
+ padding:10px 14px;background:var(--bg3);
+ display:flex;justify-content:space-between;align-items:center;
+ font-weight:600;font-size:12.5px;cursor:pointer;
+ gap:9px;user-select:none;
+}
+.issueh:hover{background:var(--bg4);}
+.issueh:focus-visible{outline:2px solid var(--or);outline-offset:-2px;}
+.issueh-left{display:flex;align-items:center;gap:9px;flex:1;min-width:0;}
+.issueh-chevron{width:16px;height:16px;flex-shrink:0;display:grid;place-items:center;color:var(--text3);transition:transform .22s var(--transition);}
+.issue.open .issueh-chevron{transform:rotate(90deg);}
+.issuetag{font-family:'JetBrains Mono',monospace;font-size:8.5px;padding:2px 6px;background:rgba(244,63,94,.1);color:var(--rose);border:1px solid rgba(244,63,94,.25);flex-shrink:0;white-space:nowrap;}
+.issuebody{
+ padding:0 14px;border-top:1px solid transparent;
+ max-height:0;overflow:hidden;
+ transition:max-height .32s cubic-bezier(.4,0,.2,1),padding .22s,border-color .22s;
+}
+.issue.open .issuebody{padding:12px 14px;border-color:var(--border);max-height:var(--h,3000px);}
+.issuebody p{margin-bottom:7px;}
+
+/* ─────────────────────────────────────────────
+  KBD
+───────────────────────────────────────────── */
+kbd{font-family:'JetBrains Mono',monospace;font-size:9.5px;background:var(--bg4);border:1px solid var(--border2);padding:2px 5px;color:var(--text);}
+
+/* ─────────────────────────────────────────────
+  RESPONSIVE — MOBILE FIRST
+───────────────────────────────────────────── */
+/* ≥ 1024px — full sidebar visible, OS labels shown */
+@media(min-width:1024px){
+ .os-label{display:inline;}
+ .os-btn{padding:6px 16px;}
+ .mb-only{display:none!important;}
+}
+
+/* 768–1023px — sidebar visible, no OS labels */
+@media(max-width:1023px) and (min-width:768px){
+ :root{--sw:220px;}
+ #topbar{grid-template-columns:var(--sw) 1fr auto;}
+ body.nav-collapsed #topbar{grid-template-columns:auto 1fr auto;}
+ .content{padding:8px 22px 0;}
+ .qs{margin:20px 22px;}
+ .hero{padding:36px 22px 32px;}
+ .disclaimer{padding:9px 22px;}
+ .dt-only{display:none!important;}
+}
+
+/* < 768px — drawer sidebar */
+@media(max-width:767px){
+ :root{--header:50px;}
+ #topbar{grid-template-columns:auto 1fr auto;}
+ #sidebar{
+  transform:translateX(-100%);
+  width:min(300px,85vw);
+  top:var(--header);
+  box-shadow:none;
+ }
+ #main{margin-left:0!important;}
+ body.nav-collapsed #main{margin-left:0!important;}
+ .tb-name{display:none;}
+ .tb-logo{border-right:none;}
+ .tb-center{padding:0 8px;}
+ .os-btn{padding:5px 10px;}
+ .content{padding:6px 16px 0;}
+ .qs{margin:14px 16px;}
+ .hero{padding:26px 16px 22px;}
+ .disclaimer{padding:8px 16px;font-size:11.5px;}
+ .qs-steps{grid-template-columns:1fr 1fr;}
+ .fgrid{grid-template-columns:1fr 1fr;}
+ .tgrid{grid-template-columns:1fr 1fr;}
+ h2{font-size:20px;}
+ .arch-row{flex-direction:column;align-items:center;}
+ .arr{flex-direction:row;}
+ .phead{gap:8px;}
+ .pbadge{width:100%;text-align:center;}
+ .dt-only{display:none!important;}
+}
+
+@media(max-width:440px){
+ .qs-steps{grid-template-columns:1fr;}
+ .fgrid{grid-template-columns:1fr;}
+ .tgrid{grid-template-columns:1fr;}
+ .srow{flex-direction:column;}
+ .htags{display:none;}
+ .os-btn{padding:5px 8px;}
+ .os-icon{width:13px;height:13px;}
+}
+
+/* ─────────────────────────────────────────────
+  PRINT
+───────────────────────────────────────────── */
+@media print{
+ #topbar,#sidebar,#sidebar-overlay{display:none!important;}
+ #main{margin-left:0!important;}
+ #app{padding-top:0;}
+ .cb-copy{display:none!important;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<a href="#main" class="skip-link" aria-label="Skip to main content">Skip to content</a>
+<header id="topbar" role="banner">
+
+ <!-- Logo + Sidebar Toggle -->
+ <div class="tb-logo">
+  <button type="button" class="tb-toggle" id="sidebar-toggle-btn" onclick="toggleNav()" aria-label="Toggle sidebar navigation" aria-expanded="true">
+   <!-- Hamburger / collapse icon -->
+   <svg class="tb-toggle-icon" width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+    <line x1="0" y1="1" x2="16" y2="1"/>
+    <line x1="0" y1="6" x2="16" y2="6"/>
+    <line x1="0" y1="11" x2="16" y2="11"/>
+   </svg>
+  </button>
+  <div class="tb-cube" aria-hidden="true">B</div>
+  <div class="tb-name">Blender<span>MCP</span></div>
+ </div>
+
+ <!-- OS Selector -->
+ <div class="tb-center">
+  <div class="os-selector-wrap">
+   <span class="os-selector-label" id="os-selector-label">Select Platform</span>
+   <div class="os-selector" role="group" aria-labelledby="os-selector-label">
+
+    <!-- macOS -->
+    <button type="button" class="os-btn mac active" onclick="setOS('mac')" aria-pressed="true" title="macOS">
+     <!-- Apple logo SVG -->
+     <svg class="os-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+     </svg>
+     <span class="os-label">macOS</span>
+    </button>
+
+    <!-- Windows -->
+    <button type="button" class="os-btn win" onclick="setOS('win')" aria-pressed="false" title="Windows">
+     <!-- Windows logo SVG (4-pane flag) -->
+     <svg class="os-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M3 12V6.75l6-1.32v6.48L3 12m17-9v8.75l-10 .15V5.21L20 3M3 13l6 .09v6.81l-6-1.15V13m17 .25V22l-10-1.91V13.1l10 .15z"/>
+     </svg>
+     <span class="os-label">Windows</span>
+    </button>
+
+    <!-- Linux -->
+    <button type="button" class="os-btn linux" onclick="setOS('linux')" aria-pressed="false" title="Linux">
+     <!-- Linux / Tux penguin SVG -->
+     <svg class="os-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 2C9.24 2 7 4.24 7 7c0 1.54.62 2.94 1.63 3.95C6.23 11.87 5 13.78 5 16c0 4.42 3.13 7 7 7s7-2.58 7-7c0-2.22-1.23-4.13-3.63-5.05C16.38 9.94 17 8.54 17 7c0-2.76-2.24-5-5-5zm-1.5 3.5c.69 0 1.25.56 1.25 1.25S11.19 8 10.5 8 9.25 7.44 9.25 6.75 9.81 5.5 10.5 5.5zm3 0c.69 0 1.25.56 1.25 1.25S14.19 8 13.5 8s-1.25-.56-1.25-1.25S12.81 5.5 13.5 5.5zM12 10.5c2.76 0 5 1.12 5 2.5 0 1-.89 1.88-2.19 2.31.12.31.19.64.19.99 0 1.93-1.35 3.2-3 3.2s-3-1.27-3-3.2c0-.35.07-.68.19-.99C7.89 14.88 7 14 7 13c0-1.38 2.24-2.5 5-2.5z"/>
+     </svg>
+     <span class="os-label">Linux</span>
+    </button>
+
+   </div>
+  </div>
+ </div>
+
+ <!-- Right actions -->
+ <div class="tb-right">
+  <a href="https://github.com/ahujasid/blender-mcp" target="_blank" rel="noopener noreferrer" class="gh-link" aria-label="View BlenderMCP on GitHub">
+   <!-- GitHub mark -->
+   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.164 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.866-.013-1.7-2.782.603-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.463-1.11-1.463-.908-.619.069-.606.069-.606 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.912.831.092-.646.35-1.086.636-1.336-2.22-.252-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.03-2.682-.103-.253-.447-1.27.098-2.646 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836a9.59 9.59 0 0 1 2.504.337c1.909-1.294 2.747-1.025 2.747-1.025.547 1.376.203 2.394.1 2.646.64.698 1.026 1.591 1.026 2.682 0 3.841-2.337 4.687-4.565 4.935.359.308.678.917.678 1.852 0 1.335-.012 2.415-.012 2.741 0 .267.18.578.688.48C19.138 20.16 22 16.416 22 12c0-5.523-4.477-10-10-10z"/>
+   </svg>
+   <span class="os-label">GitHub</span>
+   <span class="dt-only" id="gh-stars" data-gh-stars style="font-size:8px;letter-spacing:.5px;">★ 17K+</span>
+  </a>
+ </div>
+
+</header>
+
+<!-- SIDEBAR OVERLAY (mobile) -->
+<div id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<div id="app">
+
+<!-- ── SIDEBAR ── -->
+<nav id="sidebar" aria-label="Guide sections">
+ <div class="slogo-area">
+  <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--text3);">COMMUNITY GUIDE</div>
+  <div class="sver"><span aria-label="Version 1.5.5, MIT License">v1.5.5 · MIT</span></div>
+ </div>
+
+ <div class="nsec">
+  <div class="nlabel">Get Started</div>
+  <a class="ni active" href="#quickstart"><span aria-hidden="true">⚡</span> Quick Start</a>
+  <a class="ni sub" href="#about">About & Architecture</a>
+  <a class="ni sub" href="#features">Features</a>
+ </div>
+ <div class="nsec">
+  <div class="nlabel">Setup</div>
+  <a class="ni" href="#prereq">1 — Install uv</a>
+  <a class="ni" href="#addon">2 — Blender Addon</a>
+  <a class="ni" href="#connect">3 — Connect</a>
+  <a class="ni" href="#envvars">Environment Vars</a>
+ </div>
+ <div class="nsec">
+  <div class="nlabel">Clients</div>
+  <a class="ni" href="#claude">Claude Desktop</a>
+  <a class="ni sub" href="#claudecode">Claude Code CLI</a>
+  <a class="ni" href="#cursor">Cursor</a>
+  <a class="ni" href="#vscode">VS Code</a>
+  <a class="ni" href="#antigravity">Antigravity</a>
+  <a class="ni" href="#codex-desktop">Codex Desktop</a>
+  <a class="ni sub" href="#codex-cli">Codex CLI</a>
+ </div>
+ <div class="nsec">
+  <div class="nlabel">Workflows</div>
+  <a class="ni" href="#wf1">Scene Creation</a>
+  <a class="ni" href="#wf2">Materials</a>
+  <a class="ni" href="#wf3">Python Scripting</a>
+  <a class="ni" href="#wf4">Camera & Lighting</a>
+  <a class="ni" href="#wf5">Poly Haven</a>
+ </div>
+ <div class="nsec">
+  <div class="nlabel">Reference</div>
+  <a class="ni" href="#telemetry">Telemetry</a>
+  <a class="ni" href="#troubleshoot">Troubleshooting</a>
+  <a class="ni" href="#quickref">Quick Reference</a>
+ </div>
+
+ <div style="flex:1;"></div>
+ <footer class="sfooter" role="contentinfo">
+  <div><a href="https://github.com/ahujasid/blender-mcp" rel="noopener noreferrer" target="_blank">github.com/ahujasid/blender-mcp</a></div>
+  <div style="margin-top:4px;">By <a href="https://x.com/sidahuj" rel="noopener noreferrer" target="_blank">@sidahuj</a> · MIT License</div>
+  <div style="margin-top:6px;color:var(--text3);">Not official Blender software</div>
+ </footer>
+</nav>
+
+<!-- ── MAIN ── -->
+<main id="main" role="main" tabindex="-1">
+
+<!-- Disclaimer -->
+<div class="disclaimer">
+ <div>⚠️</div>
+ <p><strong>Third-party project</strong> — BlenderMCP by <strong>Siddharth Ahuja</strong>, not affiliated with the Blender Foundation. No official website — only trust <strong>github.com/ahujasid/blender-mcp</strong>.</p>
+</div>
+
+<!-- Hero -->
+<div class="hero">
+ <div class="hbg"></div><div class="hglow"></div>
+ <div class="hero-inner">
+  <div class="hero-text">
+   <div class="h-eyebrow">Complete Setup Guide</div>
+   <h1>Blender<em>MCP</em></h1>
+   <p class="h-desc">Connect Blender to any AI assistant via the Model Context Protocol.</p>
+   <div class="htags">
+    <span class="htag hl">Blender 3.0+</span>
+    <span class="htag hl">Python 3.12 only</span>
+    <span class="htag">Claude · Cursor · VS Code</span>
+    <span class="htag">Codex · Antigravity</span>
+    <span class="htag danger">Not Official Blender</span>
+   </div>
+  </div>
+  <div class="vbadge" style="flex-shrink:0;align-self:flex-start;">
+   <span>Current</span><strong>v1.5.5</strong>
+  </div>
+ </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+   QUICK START
+════════════════════════════════════════════ -->
+<div class="qs" id="quickstart">
+ <div class="qs-header">
+  <div class="qs-icon" aria-hidden="true">⚡</div>
+  <div>
+   <div class="qs-title">Quick Start — 4 Steps</div>
+   <div class="qs-sub">Everything you need to get up and running · select your OS above ↑</div>
+  </div>
+ </div>
+ <div class="qs-body">
+  <div class="qs-steps">
+   <div class="qss">
+    <div class="qss-num">1</div>
+    <div>
+     <div class="qss-title">Install uv</div>
+     <div class="qss-desc os-mac">brew install uv</div>
+     <div class="qss-desc os-win">powershell -c "irm https://astral.sh/uv/install.ps1 | iex"</div>
+     <div class="qss-desc os-linux">curl -LsSf https://astral.sh/uv/install.sh | sh</div>
+     <a class="qss-link" href="#prereq">Full instructions →</a>
+    </div>
+   </div>
+   <div class="qss">
+    <div class="qss-num">2</div>
+    <div>
+     <div class="qss-title">Install Blender Addon</div>
+     <div class="qss-desc">Download <code>addon.py</code> from GitHub root and install via Blender Preferences → Add-ons</div>
+     <a class="qss-link" href="#addon">Full instructions →</a>
+    </div>
+   </div>
+   <div class="qss">
+    <div class="qss-num">3</div>
+    <div>
+     <div class="qss-title">Connect in Blender</div>
+     <div class="qss-desc">3D Viewport → press <kbd>N</kbd> → <strong>BlenderMCP</strong> tab → click <strong>Connect to Claude</strong></div>
+     <a class="qss-link" href="#connect">Full instructions →</a>
+    </div>
+   </div>
+   <div class="qss">
+    <div class="qss-num">4</div>
+    <div>
+     <div class="qss-title">Configure Your Client</div>
+     <div class="qss-desc">Add blender-mcp to Claude Desktop, Cursor, VS Code, or Codex</div>
+     <a class="qss-link" href="#claude">Pick your client →</a>
+    </div>
+   </div>
+  </div>
+
+  <!-- Quick config for Claude Desktop (most common client) -->
+  <div style="margin-top:4px;">
+   <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:6px;">FASTEST: CLAUDE DESKTOP CONFIG</div>
+
+   <div class="os-mac">
+    <div class="cfh" style="background:var(--bg3);border:1px solid var(--border);border-bottom:0;display:flex;align-items:center;gap:7px;padding:5px 12px;">
+     <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text2);">~/Library/Application Support/Claude/claude_desktop_config.json</span>
+     <span class="cftag">macOS</span>
+    </div>
+    <div class="cb" style="margin:0;border-top:0;border-radius:0;">
+     <pre><code>{
+ <span class="ck">"mcpServers"</span>: {
+  <span class="ck">"blender"</span>: { <span class="ck">"command"</span>: <span class="cs">"uvx"</span>, <span class="ck">"args"</span>: [<span class="cs">"blender-mcp"</span>] }
+ }
+}</code></pre>
+    </div>
+   </div>
+
+   <div class="os-win">
+    <div class="cfh" style="background:var(--bg3);border:1px solid var(--border);border-bottom:0;display:flex;align-items:center;gap:7px;padding:5px 12px;">
+     <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text2);">%APPDATA%\Claude\claude_desktop_config.json</span>
+     <span class="cftag">Windows</span>
+    </div>
+    <div class="cb" style="margin:0;border-top:0;border-radius:0;">
+     <pre><code>{
+ <span class="ck">"mcpServers"</span>: {
+  <span class="ck">"blender"</span>: { <span class="ck">"command"</span>: <span class="cs">"cmd"</span>, <span class="ck">"args"</span>: [<span class="cs">"/c"</span>, <span class="cs">"uvx"</span>, <span class="cs">"blender-mcp"</span>] }
+ }
+}</code></pre>
+    </div>
+   </div>
+
+   <div class="os-linux">
+    <div class="cfh" style="background:var(--bg3);border:1px solid var(--border);border-bottom:0;display:flex;align-items:center;gap:7px;padding:5px 12px;">
+     <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text2);">~/.config/Claude/claude_desktop_config.json</span>
+     <span class="cftag">Linux</span>
+    </div>
+    <div class="cb" style="margin:0;border-top:0;border-radius:0;">
+     <pre><code>{
+ <span class="ck">"mcpServers"</span>: {
+  <span class="ck">"blender"</span>: { <span class="ck">"command"</span>: <span class="cs">"uvx"</span>, <span class="ck">"args"</span>: [<span class="cs">"blender-mcp"</span>] }
+ }
+}</code></pre>
+    </div>
+   </div>
+  </div>
+
+  <div class="qs-note">Python 3.12 required exactly — not 3.11, not 3.13+. Run <code>uv python install 3.12</code> if unsure. See <a href="#troubleshoot">Troubleshooting</a> if anything fails.</div>
+ </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+   ABOUT
+════════════════════════════════════════════ -->
+<div class="content">
+<section class="section" id="about">
+ <div class="seyebrow"><span class="num">00</span> Introduction</div>
+ <h2>About <span class="ac">BlenderMCP</span></h2>
+
+ <p><strong>BlenderMCP</strong> is an open-source project by <a href="https://x.com/sidahuj" rel="noopener noreferrer" target="_blank">Siddharth Ahuja</a> that implements the <a href="https://modelcontextprotocol.io" rel="noopener noreferrer" target="_blank">Model Context Protocol</a> to let AI assistants directly control Blender. <span id="about-stars" data-gh-stars>17K+</span> GitHub stars, <a href="https://discord.gg/z5apgR8TFU" rel="noopener noreferrer" target="_blank">active Discord community</a>. <strong>Not</strong> an official Blender product.</p>
+
+ <div class="call danger"><div class="cicon">🚫</div>
+  <p><strong>No official website.</strong> Any site claiming to be official is a fake. Only trust <strong>github.com/ahujasid/blender-mcp</strong>.</p>
+ </div>
+
+ <h3 id="architecture">How It Works</h3>
+ <p>Two processes communicate over a local TCP socket. The AI client auto-starts the MCP server — you only click one button in Blender.</p>
+
+ <div class="arch">
+  <div class="arch-row" role="img" aria-label="BlenderMCP architecture: AI Client connects to blender-mcp server which connects to Blender via TCP on port 9876">
+   <div class="ab"><span class="abi">🤖</span><div class="abt">AI Client</div><div class="abs">Claude/Cursor<br>Codex/VS Code</div></div>
+   <div class="arr"><div class="arrline"><div class="arrd"></div><div class="arrd"></div><div class="arrh">→</div></div><div class="arrl">JSON-RPC<br>stdio</div></div>
+   <div class="ab hl"><span class="abi">⚙️</span><div class="abt">blender-mcp</div><div class="abs">auto-started<br>by client</div></div>
+   <div class="arr"><div class="arrline"><div class="arrd"></div><div class="arrd"></div><div class="arrh">→</div></div><div class="arrl">TCP Socket<br>:9876</div></div>
+   <div class="ab"><span class="abi">🔌</span><div class="abt">addon.py</div><div class="abs">Socket server<br>in Blender</div></div>
+   <div class="arr"><div class="arrline"><div class="arrd"></div><div class="arrd"></div><div class="arrh">→</div></div><div class="arrl">bpy API</div></div>
+   <div class="ab"><span class="abi">🖥</span><div class="abt">Blender</div><div class="abs">Live 3D<br>viewport</div></div>
+  </div>
+  <div class="arch-note">AI client auto-launches blender-mcp → connects to addon socket → executes bpy → scene updates live</div>
+ </div>
+
+ <h3>Repository Files</h3>
+ <div class="cb teal"><div class="cbh"><span class="cbf">github.com/ahujasid/blender-mcp — tree</span><span class="cbl">structure</span></div>
+ <pre><code>blender-mcp/
+├── <span class="co">addon.py</span>    <span class="cc"># ← Install THIS into Blender (repo root)</span>
+├── main.py    <span class="cc"># MCP server entry point</span>
+├── src/blender_mcp/server.py
+└── pyproject.toml <span class="cc"># pip/uvx installable</span></code></pre></div>
+
+ <div class="call warn"><div class="cicon">⚠️</div>
+  <p>The addon is <strong>addon.py at the repo root</strong> — not <code>blender_mcp.py</code> and not inside any subfolder.</p>
+ </div>
+
+ <h3 id="features">Features in v1.5.5</h3>
+ <div class="fgrid">
+  <div class="fi o"><div class="fin">Object Manipulation</div><div class="fid">Create, modify, delete</div></div>
+  <div class="fi t"><div class="fin">Material Control</div><div class="fid">BSDF materials & colors</div></div>
+  <div class="fi b"><div class="fin">Scene Inspection</div><div class="fid">Query all objects & lights</div></div>
+  <div class="fi g"><div class="fin">Python Execution</div><div class="fid">Run arbitrary bpy code</div></div>
+  <div class="fi p"><div class="fin">Poly Haven API</div><div class="fid">HDRIs, textures, models</div></div>
+  <div class="fi r"><div class="fin">Hyper3D / Rodin</div><div class="fid">AI-generated 3D models</div></div>
+  <div class="fi o"><div class="fin">Sketchfab Search</div><div class="fid">Search & import models</div></div>
+  <div class="fi t"><div class="fin">Viewport Screenshots</div><div class="fid">AI sees your viewport</div></div>
+  <div class="fi b"><div class="fin">Hunyuan3D</div><div class="fid">Tencent 3D generation</div></div>
+  <div class="fi g"><div class="fin">Remote Host</div><div class="fid">Run on remote machine</div></div>
+ </div>
+
+ <h3>Available MCP Tools</h3>
+ <div class="tgrid">
+  <div class="ti"><div class="tin">get_scene_info</div><div class="tid">All objects, meshes, materials</div></div>
+  <div class="ti"><div class="tin">get_object_info</div><div class="tid">Properties of a named object</div></div>
+  <div class="ti"><div class="tin">execute_blender_code</div><div class="tid">Run arbitrary bpy Python</div></div>
+  <div class="ti"><div class="tin">create_object</div><div class="tid">Add mesh primitives</div></div>
+  <div class="ti"><div class="tin">modify_object</div><div class="tid">Location, rotation, scale</div></div>
+  <div class="ti"><div class="tin">delete_object</div><div class="tid">Remove objects</div></div>
+  <div class="ti"><div class="tin">set_material</div><div class="tid">Create & assign BSDF</div></div>
+  <div class="ti"><div class="tin">render_scene</div><div class="tid">Trigger render</div></div>
+  <div class="ti"><div class="tin">get_polyhaven_asset</div><div class="tid">Download Poly Haven assets</div></div>
+  <div class="ti"><div class="tin">set_keyframe</div><div class="tid">Insert animation keyframes</div></div>
+  <div class="ti"><div class="tin">get_viewport_screenshot</div><div class="tid">Capture viewport</div></div>
+  <div class="ti"><div class="tin">search_sketchfab</div><div class="tid">Search & import Sketchfab</div></div>
+ </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+   PREREQ
+════════════════════════════════════════════ -->
+<section class="section" id="prereq">
+ <div class="srule"></div>
+ <div class="seyebrow"><span class="num">01</span> Setup — Step 1</div>
+ <h2>Prerequisites & <span class="ac">uv Setup</span></h2>
+
+ <div class="tw"><table>
+  <tr><th>Tool</th><th>Requirement</th><th>Check</th></tr>
+  <tr><td><strong>Blender</strong></td><td>3.0 or newer</td><td><code>blender --version</code></td></tr>
+  <tr><td><strong>Python</strong></td><td><strong style="color:var(--rose)">3.12 exactly</strong> — only 3.12</td><td><code>python3 --version</code></td></tr>
+  <tr><td><strong>uv</strong></td><td>Latest</td><td><code>uv --version</code></td></tr>
+ </table></div>
+
+ <div class="call danger"><div class="cicon">🐍</div>
+  <p><strong>Python 3.12 only.</strong> The MCP server requires exactly Python 3.12 — not 3.10, 3.11, or 3.13+. Run <code>uv python install 3.12</code> to install the correct version.</p>
+ </div>
+
+ <h3>Install uv</h3>
+
+ <div class="os-block os-mac">
+  <div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg> macOS</div>
+  <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">Terminal</div></div>
+  <pre><code><span class="tp">$</span> <span class="tc">brew install uv</span>
+<span class="tp">$</span> <span class="tc">uv --version</span>
+<span class="tok">uv 0.5.x</span></code></pre></div>
+  <p style="font-size:12px;color:var(--text3);">No Homebrew? <code>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</code></p>
+ </div>
+
+ <div class="os-block os-win">
+  <div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 12V6.75l6-1.32v6.48L3 12m17-9v8.75l-10 .15V5.21L20 3M3 13l6 .09v6.81l-6-1.15V13m17 .25V22l-10-1.91V13.1l10 .15z"/></svg> Windows</div>
+  <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">PowerShell (Admin)</div></div>
+  <pre><code><span class="cc"># Install uv</span>
+<span class="tp">PS></span> <span class="tc">powershell -c "irm https://astral.sh/uv/install.ps1 | iex"</span>
+
+<span class="cc"># Add to PATH</span>
+<span class="tp">PS></span> <span class="tc">$p = [Environment]::GetEnvironmentVariable("Path","User")</span>
+<span class="tp">PS></span> <span class="tc">[Environment]::SetEnvironmentVariable("Path","$p;$env:USERPROFILE\.local\bin","User")</span>
+
+<span class="cc"># Open new terminal and verify</span>
+<span class="tp">PS></span> <span class="tc">uv --version</span>
+<span class="tok">uv 0.5.x</span></code></pre></div>
+  <div class="call warn"><div class="cicon">⚠️</div><p>Restart Claude Desktop / Cursor after updating PATH on Windows.</p></div>
+ </div>
+
+ <div class="os-block os-linux">
+  <div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C9.24 2 7 4.24 7 7c0 1.54.62 2.94 1.63 3.95C6.23 11.87 5 13.78 5 16c0 4.42 3.13 7 7 7s7-2.58 7-7c0-2.22-1.23-4.13-3.63-5.05C16.38 9.94 17 8.54 17 7c0-2.76-2.24-5-5-5zm-1.5 3.5c.69 0 1.25.56 1.25 1.25S11.19 8 10.5 8 9.25 7.44 9.25 6.75 9.81 5.5 10.5 5.5zm3 0c.69 0 1.25.56 1.25 1.25S14.19 8 13.5 8s-1.25-.56-1.25-1.25S12.81 5.5 13.5 5.5zM12 10.5c2.76 0 5 1.12 5 2.5 0 1-.89 1.88-2.19 2.31.12.31.19.64.19.99 0 1.93-1.35 3.2-3 3.2s-3-1.27-3-3.2c0-.35.07-.68.19-.99C7.89 14.88 7 14 7 13c0-1.38 2.24-2.5 5-2.5z"/></svg> Linux</div>
+  <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">Terminal</div></div>
+  <pre><code><span class="tp">$</span> <span class="tc">curl -LsSf https://astral.sh/uv/install.sh | sh</span>
+<span class="tp">$</span> <span class="tc">echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc && source ~/.bashrc</span>
+<span class="tp">$</span> <span class="tc">uv --version</span>
+<span class="tok">uv 0.5.x</span></code></pre></div>
+ </div>
+
+ <h3>Install Python 3.12 via uv</h3>
+ <div class="cb"><div class="cbh"><span class="cbf">All platforms</span><span class="cbl">shell</span></div>
+ <pre><code><span class="cc"># Install exactly Python 3.12</span>
+<span class="tp">$</span> <span class="tc">uv python install 3.12</span>
+<span class="tok">Installed Python 3.12.x</span></code></pre></div>
+</section>
+
+<!-- ══════════════════════════════════════════
+   ADDON
+════════════════════════════════════════════ -->
+<section class="section" id="addon">
+ <div class="srule"></div>
+ <div class="seyebrow"><span class="num">02</span> Setup — Step 2</div>
+ <h2>Installing the <span class="ac">Blender Addon</span></h2>
+ <p><code>addon.py</code> opens a TCP socket server inside Blender so the MCP server can send commands.</p>
+
+ <h3>Step 1 — Download addon.py</h3>
+
+ <div class="os-block os-mac">
+  <div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg> macOS / <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C9.24 2 7 4.24 7 7c0 1.54.62 2.94 1.63 3.95C6.23 11.87 5 13.78 5 16c0 4.42 3.13 7 7 7s7-2.58 7-7c0-2.22-1.23-4.13-3.63-5.05C16.38 9.94 17 8.54 17 7c0-2.76-2.24-5-5-5zm-1.5 3.5c.69 0 1.25.56 1.25 1.25S11.19 8 10.5 8 9.25 7.44 9.25 6.75 9.81 5.5 10.5 5.5zm3 0c.69 0 1.25.56 1.25 1.25S14.19 8 13.5 8s-1.25-.56-1.25-1.25S12.81 5.5 13.5 5.5zM12 10.5c2.76 0 5 1.12 5 2.5 0 1-.89 1.88-2.19 2.31.12.31.19.64.19.99 0 1.93-1.35 3.2-3 3.2s-3-1.27-3-3.2c0-.35.07-.68.19-.99C7.89 14.88 7 14 7 13c0-1.38 2.24-2.5 5-2.5z"/></svg> Linux</div>
+  <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">Terminal</div></div>
+  <pre><code><span class="tp">$</span> <span class="tc">curl -L "https://github.com/ahujasid/blender-mcp/raw/main/addon.py" -o ~/Downloads/addon.py</span></code></pre></div>
+ </div>
+
+ <div class="os-block os-linux">
+  <div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C9.24 2 7 4.24 7 7c0 1.54.62 2.94 1.63 3.95C6.23 11.87 5 13.78 5 16c0 4.42 3.13 7 7 7s7-2.58 7-7c0-2.22-1.23-4.13-3.63-5.05C16.38 9.94 17 8.54 17 7c0-2.76-2.24-5-5-5zm-1.5 3.5c.69 0 1.25.56 1.25 1.25S11.19 8 10.5 8 9.25 7.44 9.25 6.75 9.81 5.5 10.5 5.5zm3 0c.69 0 1.25.56 1.25 1.25S14.19 8 13.5 8s-1.25-.56-1.25-1.25S12.81 5.5 13.5 5.5zM12 10.5c2.76 0 5 1.12 5 2.5 0 1-.89 1.88-2.19 2.31.12.31.19.64.19.99 0 1.93-1.35 3.2-3 3.2s-3-1.27-3-3.2c0-.35.07-.68.19-.99C7.89 14.88 7 14 7 13c0-1.38 2.24-2.5 5-2.5z"/></svg> Linux</div>
+  <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">Terminal</div></div>
+  <pre><code><span class="tp">$</span> <span class="tc">curl -L "https://github.com/ahujasid/blender-mcp/raw/main/addon.py" -o ~/Downloads/addon.py</span></code></pre></div>
+ </div>
+
+ <div class="os-block os-win">
+  <div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 12V6.75l6-1.32v6.48L3 12m17-9v8.75l-10 .15V5.21L20 3M3 13l6 .09v6.81l-6-1.15V13m17 .25V22l-10-1.91V13.1l10 .15z"/></svg> Windows</div>
+  <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">PowerShell</div></div>
+  <pre><code><span class="tp">PS></span> <span class="tc">Invoke-WebRequest -Uri "https://github.com/ahujasid/blender-mcp/raw/main/addon.py" -OutFile "$env:USERPROFILE\Downloads\addon.py"</span></code></pre></div>
+  <p style="font-size:12px;color:var(--text2);">Or just open the link in your browser and save: <code>github.com/ahujasid/blender-mcp/raw/main/addon.py</code></p>
+ </div>
+
+ <h3>Step 2 — Install in Blender</h3>
+ <div class="steps">
+  <div class="step"><div class="snum">1</div><div class="sbody"><div class="stitle">Open Blender Preferences</div>
+  <p><kbd>Edit</kbd> → <kbd>Preferences</kbd> → <kbd>Add-ons</kbd> tab</p></div></div>
+  <div class="step"><div class="snum">2</div><div class="sbody"><div class="stitle">Install the file</div>
+  <p><strong>Blender 3.x – 4.1:</strong> Click <strong>Install…</strong> → select <code>addon.py</code></p>
+  <p><strong>Blender 4.2+:</strong> Dropdown arrow (top-right) → <strong>Install from Disk…</strong> → select <code>addon.py</code></p></div></div>
+  <div class="step"><div class="snum">3</div><div class="sbody"><div class="stitle">Enable it</div>
+  <p>Search <strong>"MCP"</strong> → check the box next to <strong>Interface: Blender MCP</strong></p></div></div>
+ </div>
+
+ <div class="call info"><div class="cicon">ℹ️</div>
+  <p><strong>Updating?</strong> Re-download latest <code>addon.py</code>, reinstall in Blender, then delete and re-add the blender entry in your AI client config.</p>
+ </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+   CONNECT
+════════════════════════════════════════════ -->
+<section class="section" id="connect">
+ <div class="srule"></div>
+ <div class="seyebrow"><span class="num">03</span> Setup — Step 3</div>
+ <h2>Starting the <span class="ac">Connection</span></h2>
+
+ <div class="steps">
+  <div class="step"><div class="snum t">1</div><div class="sbody"><div class="stitle">Open 3D Viewport sidebar</div>
+  <p>Click inside the 3D Viewport → press <kbd>N</kbd></p></div></div>
+  <div class="step"><div class="snum t">2</div><div class="sbody"><div class="stitle">Find the BlenderMCP tab</div>
+  <p>Click the <strong>BlenderMCP</strong> tab in the N-panel sidebar</p></div></div>
+  <div class="step"><div class="snum t">3</div><div class="sbody"><div class="stitle">Enable Poly Haven (optional)</div>
+  <p>Check the <strong>Poly Haven checkbox</strong> if you want Poly Haven assets. Required before connecting.</p></div></div>
+  <div class="step"><div class="snum t">4</div><div class="sbody"><div class="stitle">Click "Connect to Claude"</div>
+  <p>The addon opens the socket on port 9876. The button label is <em>exactly</em> <strong>Connect to Claude</strong>.</p></div></div>
+ </div>
+
+ <div class="srow">
+  <div class="sit"><div class="sdot g"></div>Connected — socket on :9876</div>
+  <div class="sit"><div class="sdot a"></div>Not connected</div>
+  <div class="sit"><div class="sdot r"></div>Port conflict</div>
+ </div>
+
+ <h3>Verify the Connection</h3>
+
+ <div class="os-block os-mac">
+  <div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg> macOS / <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C9.24 2 7 4.24 7 7c0 1.54.62 2.94 1.63 3.95C6.23 11.87 5 13.78 5 16c0 4.42 3.13 7 7 7s7-2.58 7-7c0-2.22-1.23-4.13-3.63-5.05C16.38 9.94 17 8.54 17 7c0-2.76-2.24-5-5-5zm-1.5 3.5c.69 0 1.25.56 1.25 1.25S11.19 8 10.5 8 9.25 7.44 9.25 6.75 9.81 5.5 10.5 5.5zm3 0c.69 0 1.25.56 1.25 1.25S14.19 8 13.5 8s-1.25-.56-1.25-1.25S12.81 5.5 13.5 5.5zM12 10.5c2.76 0 5 1.12 5 2.5 0 1-.89 1.88-2.19 2.31.12.31.19.64.19.99 0 1.93-1.35 3.2-3 3.2s-3-1.27-3-3.2c0-.35.07-.68.19-.99C7.89 14.88 7 14 7 13c0-1.38 2.24-2.5 5-2.5z"/></svg> Linux</div>
+  <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">Terminal</div></div>
+  <pre><code><span class="tp">$</span> <span class="tc">nc -zv localhost 9876</span>
+<span class="tok">Connection to localhost port 9876 succeeded!</span>
+<span class="terr">Connection refused ← click "Connect to Claude" in Blender</span></code></pre></div>
+ </div>
+
+ <div class="os-block os-linux">
+  <div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C9.24 2 7 4.24 7 7c0 1.54.62 2.94 1.63 3.95C6.23 11.87 5 13.78 5 16c0 4.42 3.13 7 7 7s7-2.58 7-7c0-2.22-1.23-4.13-3.63-5.05C16.38 9.94 17 8.54 17 7c0-2.76-2.24-5-5-5zm-1.5 3.5c.69 0 1.25.56 1.25 1.25S11.19 8 10.5 8 9.25 7.44 9.25 6.75 9.81 5.5 10.5 5.5zm3 0c.69 0 1.25.56 1.25 1.25S14.19 8 13.5 8s-1.25-.56-1.25-1.25S12.81 5.5 13.5 5.5zM12 10.5c2.76 0 5 1.12 5 2.5 0 1-.89 1.88-2.19 2.31.12.31.19.64.19.99 0 1.93-1.35 3.2-3 3.2s-3-1.27-3-3.2c0-.35.07-.68.19-.99C7.89 14.88 7 14 7 13c0-1.38 2.24-2.5 5-2.5z"/></svg> Linux</div>
+  <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">Terminal</div></div>
+  <pre><code><span class="tp">$</span> <span class="tc">nc -zv localhost 9876</span>
+<span class="tok">Connection to localhost port 9876 succeeded!</span></code></pre></div>
+ </div>
+
+ <div class="os-block os-win">
+  <div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 12V6.75l6-1.32v6.48L3 12m17-9v8.75l-10 .15V5.21L20 3M3 13l6 .09v6.81l-6-1.15V13m17 .25V22l-10-1.91V13.1l10 .15z"/></svg> Windows</div>
+  <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">PowerShell</div></div>
+  <pre><code><span class="tp">PS></span> <span class="tc">Test-NetConnection -ComputerName localhost -Port 9876</span>
+<span class="tok">TcpTestSucceeded : True  ← connected</span>
+<span class="terr">TcpTestSucceeded : False ← click "Connect to Claude" in Blender</span></code></pre></div>
+ </div>
+
+ <div class="call danger"><div class="cicon">🚫</div>
+  <p><strong>Do NOT run <code>uvx blender-mcp</code> manually.</strong> The AI client starts it automatically. Running it manually causes conflicts.</p>
+ </div>
+ <div class="call warn"><div class="cicon">⚠️</div>
+  <p><strong>One client at a time only.</strong> Don't run Claude Desktop and Cursor simultaneously against the same Blender session.</p>
+ </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+   ENV VARS
+════════════════════════════════════════════ -->
+<section class="section" id="envvars">
+ <div class="srule"></div>
+ <div class="seyebrow"><span class="num">04</span> Configuration</div>
+ <h2>Environment <span class="ac">Variables</span></h2>
+
+ <div class="env-row"><span class="env-key">BLENDER_HOST</span><span class="env-val">Host address. Default: <code>localhost</code>. Use <code>host.docker.internal</code> for Docker.</span></div>
+ <div class="env-row"><span class="env-key">BLENDER_PORT</span><span class="env-val">Port for the socket server. Default: <code>9876</code>.</span></div>
+ <div class="env-row"><span class="env-key">DISABLE_TELEMETRY</span><span class="env-val">Set to <code>true</code> to disable all telemetry.</span></div>
+
+ <p style="margin-top:10px;font-size:12.5px;color:var(--text2);">Add under the <code>"env"</code> key in any JSON client config:</p>
+ <div class="cb"><div class="cbh"><span class="cbf">Any JSON client — env vars example</span><span class="cbl">JSON</span></div>
+ <pre><code>{
+ <span class="ck">"mcpServers"</span>: {
+  <span class="ck">"blender"</span>: {
+   <span class="ck">"command"</span>: <span class="cs">"uvx"</span>, <span class="ck">"args"</span>: [<span class="cs">"blender-mcp"</span>],
+   <span class="ck">"env"</span>: {
+    <span class="ck">"BLENDER_PORT"</span>: <span class="cs">"9876"</span>,
+    <span class="ck">"DISABLE_TELEMETRY"</span>: <span class="cs">"true"</span>
+   }
+  }
+ }
+}</code></pre></div>
+</section>
+
+<!-- ══════════════════════════════════════════
+   CLAUDE DESKTOP
+════════════════════════════════════════════ -->
+<section class="section" id="claude">
+ <div class="srule"></div>
+ <div class="seyebrow"><span class="num">05</span> MCP Client</div>
+ <div class="phead">
+  <div class="picon" aria-hidden="true">🤖</div>
+  <div>
+   <div class="pname">Claude Desktop</div>
+   <div class="psub">claude_desktop_config.json · Native MCP · macOS, Windows &amp; Linux</div>
+  </div>
+  <a href="https://support.claude.com/en/articles/10949351-getting-started-with-local-mcp-servers-on-claude-desktop" target="_blank" rel="noopener noreferrer" class="pbadge" title="Official Anthropic MCP docs" style="text-decoration:none;">OFFICIAL DOCS ↗</a>
+ </div>
+ <p>Claude Desktop has first-class MCP support. Once connected, a <strong>🔨 hammer icon</strong> appears in the chat input — click it to confirm Blender tools are loaded.</p>
+
+ <h3>Config location & content</h3>
+
+ <div class="os-block os-mac">
+  <div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg> macOS</div>
+  <div class="cfile"><div class="cfh"><span>📄</span><span class="cfpath">~/Library/Application Support/Claude/claude_desktop_config.json</span><span class="cftag">JSON</span></div>
+  <div class="cb" style="margin:0;border:none;border-left:3px solid var(--or);">
+  <pre><code>{
+  <span class="ck">"mcpServers"</span>: {
+    <span class="ck">"blender"</span>: {
+      <span class="ck">"command"</span>: <span class="cs">"uvx"</span>,
+      <span class="ck">"args"</span>: [<span class="cs">"blender-mcp"</span>]
+    }
+  }
+}</code></pre></div></div>
+  <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">Open config file</div></div>
+  <pre><code><span class="cc"># Open via: Claude → Settings → Developer → Edit Config, or:</span>
+<span class="tp">$</span> <span class="tc">open ~/Library/Application\ Support/Claude/claude_desktop_config.json</span></code></pre></div>
+ </div>
+
+ <div class="os-block os-win">
+  <div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 12V6.75l6-1.32v6.48L3 12m17-9v8.75l-10 .15V5.21L20 3M3 13l6 .09v6.81l-6-1.15V13m17 .25V22l-10-1.91V13.1l10 .15z"/></svg> Windows</div>
+  <div class="cfile"><div class="cfh"><span>📄</span><span class="cfpath">%APPDATA%\Claude\claude_desktop_config.json</span><span class="cftag">JSON</span></div>
+  <div class="cb" style="margin:0;border:none;border-left:3px solid var(--or);">
+  <pre><code>{
+  <span class="ck">"mcpServers"</span>: {
+    <span class="ck">"blender"</span>: {
+      <span class="ck">"command"</span>: <span class="cs">"cmd"</span>,
+      <span class="ck">"args"</span>: [<span class="cs">"/c"</span>, <span class="cs">"uvx"</span>, <span class="cs">"blender-mcp"</span>]
+    }
+  }
+}</code></pre></div></div>
+  <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">Open config file</div></div>
+  <pre><code><span class="cc"># Open via: Claude → Settings → Developer → Edit Config, or:</span>
+<span class="tp">PS></span> <span class="tc">notepad "$env:APPDATA\Claude\claude_desktop_config.json"</span></code></pre></div>
+ </div>
+
+ <div class="os-block os-linux">
+  <div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C9.24 2 7 4.24 7 7c0 1.54.62 2.94 1.63 3.95C6.23 11.87 5 13.78 5 16c0 4.42 3.13 7 7 7s7-2.58 7-7c0-2.22-1.23-4.13-3.63-5.05C16.38 9.94 17 8.54 17 7c0-2.76-2.24-5-5-5zm-1.5 3.5c.69 0 1.25.56 1.25 1.25S11.19 8 10.5 8 9.25 7.44 9.25 6.75 9.81 5.5 10.5 5.5zm3 0c.69 0 1.25.56 1.25 1.25S14.19 8 13.5 8s-1.25-.56-1.25-1.25S12.81 5.5 13.5 5.5zM12 10.5c2.76 0 5 1.12 5 2.5 0 1-.89 1.88-2.19 2.31.12.31.19.64.19.99 0 1.93-1.35 3.2-3 3.2s-3-1.27-3-3.2c0-.35.07-.68.19-.99C7.89 14.88 7 14 7 13c0-1.38 2.24-2.5 5-2.5z"/></svg> Linux</div>
+  <div class="cfile"><div class="cfh"><span>📄</span><span class="cfpath">~/.config/Claude/claude_desktop_config.json</span><span class="cftag">JSON</span></div>
+  <div class="cb" style="margin:0;border:none;border-left:3px solid var(--or);">
+  <pre><code>{
+  <span class="ck">"mcpServers"</span>: {
+    <span class="ck">"blender"</span>: {
+      <span class="ck">"command"</span>: <span class="cs">"uvx"</span>,
+      <span class="ck">"args"</span>: [<span class="cs">"blender-mcp"</span>]
+    }
+  }
+}</code></pre></div></div>
+  <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">Create config</div></div>
+  <pre><code><span class="tp">$</span> <span class="tc">mkdir -p ~/.config/Claude && nano ~/.config/Claude/claude_desktop_config.json</span></code></pre></div>
+ </div>
+
+ <p style="margin-top:10px;font-size:13px;">After editing: fully quit Claude Desktop (<kbd>⌘ Q</kbd> / system tray → Exit) then reopen.</p>
+
+ <div id="claudecode">
+  <h3>Claude Code CLI</h3>
+  <p>If you use <a href="https://claude.ai/code">Claude Code</a> (terminal agent), add BlenderMCP with one command. <a href="https://docs.anthropic.com/en/docs/claude-code/mcp" target="_blank" rel="noopener noreferrer">Official MCP docs ↗</a></p>
+  <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">Any terminal</div></div>
+  <pre><code><span class="tp">$</span> <span class="tc">claude mcp add blender uvx blender-mcp</span>
+<span class="tok">✓ Added MCP server 'blender'</span></code></pre></div>
+ </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+   CURSOR
+════════════════════════════════════════════ -->
+<section class="section" id="cursor">
+ <div class="srule"></div>
+ <div class="seyebrow"><span class="num">06</span> MCP Client</div>
+ <div class="phead">
+  <div class="picon" aria-hidden="true">⌥</div>
+  <div>
+   <div class="pname">Cursor</div>
+   <div class="psub">Settings → MCP · Agent mode required</div>
+  </div>
+  <a href="https://docs.cursor.com/context/model-context-protocol" target="_blank" rel="noopener noreferrer" class="pbadge" title="Official Cursor MCP docs" style="text-decoration:none;">OFFICIAL DOCS ↗</a>
+ </div>
+ <p>Install via one-click badge or manual JSON config. MCP tools only work in <strong>Agent mode</strong> (not Ask or Edit mode). <a href="https://docs.cursor.com/context/model-context-protocol" target="_blank" rel="noopener noreferrer">Official Cursor MCP docs ↗</a></p>
+
+ <h3>Option A — One-Click (GitHub README)</h3>
+ <p>Visit <a href="https://github.com/ahujasid/blender-mcp">github.com/ahujasid/blender-mcp</a> → click the <strong>Install MCP Server</strong> badge for Cursor.</p>
+
+ <h3>Option B — Manual Config</h3>
+
+ <div class="os-block os-mac">
+  <div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg> macOS / <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C9.24 2 7 4.24 7 7c0 1.54.62 2.94 1.63 3.95C6.23 11.87 5 13.78 5 16c0 4.42 3.13 7 7 7s7-2.58 7-7c0-2.22-1.23-4.13-3.63-5.05C16.38 9.94 17 8.54 17 7c0-2.76-2.24-5-5-5zm-1.5 3.5c.69 0 1.25.56 1.25 1.25S11.19 8 10.5 8 9.25 7.44 9.25 6.75 9.81 5.5 10.5 5.5zm3 0c.69 0 1.25.56 1.25 1.25S14.19 8 13.5 8s-1.25-.56-1.25-1.25S12.81 5.5 13.5 5.5zM12 10.5c2.76 0 5 1.12 5 2.5 0 1-.89 1.88-2.19 2.31.12.31.19.64.19.99 0 1.93-1.35 3.2-3 3.2s-3-1.27-3-3.2c0-.35.07-.68.19-.99C7.89 14.88 7 14 7 13c0-1.38 2.24-2.5 5-2.5z"/></svg> Linux</div>
+  <div class="cfile"><div class="cfh"><span>📄</span><span class="cfpath">~/.cursor/mcp.json</span><span class="cftag">JSON</span></div>
+  <div class="cb" style="margin:0;border:none;border-left:3px solid var(--teal);">
+  <pre><code>{
+  <span class="ck">"mcpServers"</span>: {
+    <span class="ck">"blender"</span>: {
+      <span class="ck">"command"</span>: <span class="cs">"uvx"</span>,
+      <span class="ck">"args"</span>: [<span class="cs">"blender-mcp"</span>]
+    }
+  }
+}</code></pre></div></div>
+ </div>
+
+ <div class="os-block os-linux">
+  <div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C9.24 2 7 4.24 7 7c0 1.54.62 2.94 1.63 3.95C6.23 11.87 5 13.78 5 16c0 4.42 3.13 7 7 7s7-2.58 7-7c0-2.22-1.23-4.13-3.63-5.05C16.38 9.94 17 8.54 17 7c0-2.76-2.24-5-5-5zm-1.5 3.5c.69 0 1.25.56 1.25 1.25S11.19 8 10.5 8 9.25 7.44 9.25 6.75 9.81 5.5 10.5 5.5zm3 0c.69 0 1.25.56 1.25 1.25S14.19 8 13.5 8s-1.25-.56-1.25-1.25S12.81 5.5 13.5 5.5zM12 10.5c2.76 0 5 1.12 5 2.5 0 1-.89 1.88-2.19 2.31.12.31.19.64.19.99 0 1.93-1.35 3.2-3 3.2s-3-1.27-3-3.2c0-.35.07-.68.19-.99C7.89 14.88 7 14 7 13c0-1.38 2.24-2.5 5-2.5z"/></svg> Linux</div>
+  <div class="cfile"><div class="cfh"><span>📄</span><span class="cfpath">~/.cursor/mcp.json</span><span class="cftag">JSON</span></div>
+  <div class="cb" style="margin:0;border:none;border-left:3px solid var(--teal);">
+  <pre><code>{
+  <span class="ck">"mcpServers"</span>: {
+    <span class="ck">"blender"</span>: { <span class="ck">"command"</span>: <span class="cs">"uvx"</span>, <span class="ck">"args"</span>: [<span class="cs">"blender-mcp"</span>] }
+  }
+}</code></pre></div></div>
+ </div>
+
+ <div class="os-block os-win">
+  <div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 12V6.75l6-1.32v6.48L3 12m17-9v8.75l-10 .15V5.21L20 3M3 13l6 .09v6.81l-6-1.15V13m17 .25V22l-10-1.91V13.1l10 .15z"/></svg> Windows</div>
+  <div class="cfile"><div class="cfh"><span>📄</span><span class="cfpath">~/.cursor/mcp.json</span><span class="cftag">JSON</span></div>
+  <div class="cb" style="margin:0;border:none;border-left:3px solid var(--teal);">
+  <pre><code>{
+  <span class="ck">"mcpServers"</span>: {
+    <span class="ck">"blender"</span>: {
+      <span class="ck">"command"</span>: <span class="cs">"cmd"</span>,
+      <span class="ck">"args"</span>: [<span class="cs">"/c"</span>, <span class="cs">"uvx"</span>, <span class="cs">"blender-mcp"</span>]
+    }
+  }
+}</code></pre></div></div>
+  <div class="call info"><div class="cicon">ℹ️</div><p>Windows requires the <code>cmd /c</code> wrapper — specified in the official README's Windows Cursor instructions.</p></div>
+ </div>
+
+ <p>After saving: <kbd>Ctrl/⌘ Shift P</kbd> → <strong>Reload Window</strong> → switch to <strong>Agent</strong> mode.</p>
+</section>
+
+<!-- ══════════════════════════════════════════
+   VS CODE
+════════════════════════════════════════════ -->
+<section class="section" id="vscode">
+ <div class="srule"></div>
+ <div class="seyebrow"><span class="num">07</span> MCP Client</div>
+ <div class="phead">
+  <div class="picon" aria-hidden="true">🔵</div>
+  <div>
+   <div class="pname">VS Code</div>
+   <div class="psub">GitHub Copilot (v1.99+) or Cline extension</div>
+  </div>
+  <a href="https://code.visualstudio.com/docs/copilot/customization/mcp-servers" target="_blank" rel="noopener noreferrer" class="pbadge" title="Official VS Code MCP docs" style="text-decoration:none;">OFFICIAL DOCS ↗</a>
+ </div>
+
+ <h3>Method A — Install Badge (Easiest)</h3>
+ <p>Go to <a href="https://github.com/ahujasid/blender-mcp">github.com/ahujasid/blender-mcp</a> → click <strong>Install in VS Code</strong>. Auto-configures all platforms.</p>
+
+ <h3>Method B — Cline Extension</h3>
+ <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">Terminal</div></div>
+ <pre><code><span class="tp">$</span> <span class="tc">code --install-extension saoudrizwan.claude-dev</span></code></pre></div>
+ <p>Then: Cline icon → <strong>MCP Servers</strong> → <strong>Edit Config</strong>:</p>
+ <div class="cfile"><div class="cfh"><span>📄</span><span class="cfpath">cline_mcp_settings.json</span><span class="cftag">JSON</span></div>
+ <div class="cb" style="margin:0;border:none;border-left:3px solid var(--blue);">
+ <pre><code>{
+ <span class="ck">"mcpServers"</span>: {
+  <span class="ck">"blender"</span>: {
+   <span class="ck">"command"</span>: <span class="cs">"uvx"</span>, <span class="ck">"args"</span>: [<span class="cs">"blender-mcp"</span>],
+   <span class="ck">"autoApprove"</span>: [<span class="cs">"get_scene_info"</span>, <span class="cs">"get_object_info"</span>]
+  }
+ }
+}</code></pre></div></div>
+ <p style="font-size:12px;color:var(--text3);">Windows: use <code>"command":"cmd","args":["/c","uvx","blender-mcp"]</code></p>
+
+ <h3>Method C — GitHub Copilot (VS Code 1.99+)</h3>
+ <p><kbd>Ctrl/⌘ Shift P</kbd> → <strong>Open User Settings (JSON)</strong>:</p>
+ <div class="cfile"><div class="cfh"><span>📄</span><span class="cfpath">settings.json</span><span class="cftag">JSON</span></div>
+ <div class="cb" style="margin:0;border:none;border-left:3px solid var(--blue);">
+ <pre><code>{
+ <span class="ck">"github.copilot.chat.mcp.servers"</span>: {
+  <span class="ck">"blender"</span>: { <span class="ck">"command"</span>: <span class="cs">"uvx"</span>, <span class="ck">"args"</span>: [<span class="cs">"blender-mcp"</span>], <span class="ck">"type"</span>: <span class="cs">"stdio"</span> }
+ }
+}</code></pre></div></div>
+ <p>Use in Copilot Chat → switch to <strong>Agent</strong> mode (<kbd>Ctrl/⌘ Shift I</kbd>).</p>
+</section>
+
+<!-- ══════════════════════════════════════════
+   ANTIGRAVITY
+════════════════════════════════════════════ -->
+<section class="section" id="antigravity">
+ <div class="srule"></div>
+ <div class="seyebrow"><span class="num">08</span> MCP Client</div>
+ <div class="phead">
+  <div class="picon" aria-hidden="true">🚀</div>
+  <div>
+   <div class="pname">Antigravity</div>
+   <div class="psub">AI-native IDE · Built-in MCP UI · macOS &amp; Windows</div>
+  </div>
+  <div class="pbadge">BUILT-IN MCP</div>
+ </div>
+
+ <div class="os-block os-mac">
+  <div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg> macOS</div>
+  <div class="cfile"><div class="cfh"><span>📄</span><span class="cfpath">~/Library/Application Support/Antigravity/mcp.json</span><span class="cftag">JSON</span></div>
+  <div class="cb" style="margin:0;border:none;border-left:3px solid var(--purple);">
+  <pre><code>{
+ <span class="ck">"servers"</span>: [{
+  <span class="ck">"name"</span>: <span class="cs">"blender"</span>, <span class="ck">"command"</span>: <span class="cs">"uvx"</span>,
+  <span class="ck">"args"</span>: [<span class="cs">"blender-mcp"</span>], <span class="ck">"transport"</span>: <span class="cs">"stdio"</span>,
+  <span class="ck">"autoStart"</span>: <span class="cw">true</span>
+ }]
+}</code></pre></div></div>
+ </div>
+
+ <div class="os-block os-linux">
+  <p style="color:var(--text3);font-size:13px;">Antigravity is available on macOS and Windows only. Select a different OS above or use a different client.</p>
+ </div>
+
+ <div class="os-block os-win">
+  <div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 12V6.75l6-1.32v6.48L3 12m17-9v8.75l-10 .15V5.21L20 3M3 13l6 .09v6.81l-6-1.15V13m17 .25V22l-10-1.91V13.1l10 .15z"/></svg> Windows</div>
+  <div class="cfile"><div class="cfh"><span>📄</span><span class="cfpath">%APPDATA%\Antigravity\mcp.json</span><span class="cftag">JSON</span></div>
+  <div class="cb" style="margin:0;border:none;border-left:3px solid var(--purple);">
+  <pre><code>{
+ <span class="ck">"servers"</span>: [{
+  <span class="ck">"name"</span>: <span class="cs">"blender"</span>, <span class="ck">"command"</span>: <span class="cs">"cmd"</span>,
+  <span class="ck">"args"</span>: [<span class="cs">"/c"</span>, <span class="cs">"uvx"</span>, <span class="cs">"blender-mcp"</span>],
+  <span class="ck">"transport"</span>: <span class="cs">"stdio"</span>, <span class="ck">"autoStart"</span>: <span class="cw">true</span>
+ }]
+}</code></pre></div></div>
+ </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+   CODEX DESKTOP
+════════════════════════════════════════════ -->
+<section class="section" id="codex-desktop">
+ <div class="srule"></div>
+ <div class="seyebrow"><span class="num">09</span> MCP Client</div>
+ <div class="phead">
+  <div class="picon" aria-hidden="true">🖥</div>
+  <div>
+   <div class="pname">OpenAI Codex</div>
+   <div class="psub">CLI · IDE Extension · Shared TOML config</div>
+  </div>
+  <a href="https://developers.openai.com/codex/mcp" target="_blank" rel="noopener noreferrer" class="pbadge" title="Official Codex MCP docs" style="text-decoration:none;">OFFICIAL DOCS ↗</a>
+ </div>
+
+ <div class="call info"><div class="cicon">ℹ️</div>
+  <p><strong>Requires:</strong> ChatGPT Plus, Pro, Business, Edu, or Enterprise plan — or an OpenAI API key. The Codex CLI and IDE Extension share config, so you only set up MCP once. <a href="https://developers.openai.com/codex/cli/" target="_blank" rel="noopener noreferrer">Codex CLI docs ↗</a></p>
+ </div>
+
+ <p>The Codex CLI and IDE Extension share <code>~/.codex/config.toml</code> — configure MCP servers once and both clients use them automatically.</p>
+
+ <div class="call warn"><div class="cicon">⚠️</div>
+  <p>Codex uses <strong>TOML format</strong> at <code>config.toml</code>. A <code>config.yaml</code> is silently ignored. TOML uses <code>[mcp_servers.blender]</code> — not JSON's <code>"mcpServers"</code>.</p>
+ </div>
+
+ <div class="os-block os-mac">
+  <div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg> macOS</div>
+  <div class="cfile"><div class="cfh"><span>📄</span><span class="cfpath">~/.codex/config.toml</span><span class="cftag">TOML</span></div>
+  <div class="cb amber" style="margin:0;border:none;border-left:3px solid var(--amber);">
+  <pre><code><span class="ck">model</span> = <span class="cs">"codex-mini-latest"</span>
+
+[<span class="co">mcp_servers.blender</span>]
+<span class="ck">command</span> = <span class="cs">"uvx"</span>
+<span class="ck">args</span>  = [<span class="cs">"blender-mcp"</span>]</code></pre></div></div>
+  <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">Open config</div></div>
+  <pre><code><span class="tp">$</span> <span class="tc">mkdir -p ~/.codex && open -e ~/.codex/config.toml</span>
+<span class="cc"># Or: gear icon → Codex Settings → Open config.toml</span></code></pre></div>
+ </div>
+
+ <div class="os-block os-linux">
+  <div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C9.24 2 7 4.24 7 7c0 1.54.62 2.94 1.63 3.95C6.23 11.87 5 13.78 5 16c0 4.42 3.13 7 7 7s7-2.58 7-7c0-2.22-1.23-4.13-3.63-5.05C16.38 9.94 17 8.54 17 7c0-2.76-2.24-5-5-5zm-1.5 3.5c.69 0 1.25.56 1.25 1.25S11.19 8 10.5 8 9.25 7.44 9.25 6.75 9.81 5.5 10.5 5.5zm3 0c.69 0 1.25.56 1.25 1.25S14.19 8 13.5 8s-1.25-.56-1.25-1.25S12.81 5.5 13.5 5.5zM12 10.5c2.76 0 5 1.12 5 2.5 0 1-.89 1.88-2.19 2.31.12.31.19.64.19.99 0 1.93-1.35 3.2-3 3.2s-3-1.27-3-3.2c0-.35.07-.68.19-.99C7.89 14.88 7 14 7 13c0-1.38 2.24-2.5 5-2.5z"/></svg> Linux</div>
+  <div class="cfile"><div class="cfh"><span>📄</span><span class="cfpath">~/.codex/config.toml</span><span class="cftag">TOML</span></div>
+  <div class="cb amber" style="margin:0;border:none;border-left:3px solid var(--amber);">
+  <pre><code><span class="ck">model</span> = <span class="cs">"codex-mini-latest"</span>
+
+[<span class="co">mcp_servers.blender</span>]
+<span class="ck">command</span> = <span class="cs">"uvx"</span>
+<span class="ck">args</span>  = [<span class="cs">"blender-mcp"</span>]</code></pre></div></div>
+ </div>
+
+ <div class="os-block os-win">
+  <div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 12V6.75l6-1.32v6.48L3 12m17-9v8.75l-10 .15V5.21L20 3M3 13l6 .09v6.81l-6-1.15V13m17 .25V22l-10-1.91V13.1l10 .15z"/></svg> Windows</div>
+  <div class="cfile"><div class="cfh"><span>📄</span><span class="cfpath">%USERPROFILE%\.codex\config.toml</span><span class="cftag">TOML</span></div>
+  <div class="cb amber" style="margin:0;border:none;border-left:3px solid var(--amber);">
+  <pre><code><span class="ck">model</span> = <span class="cs">"codex-mini-latest"</span>
+
+[<span class="co">mcp_servers.blender</span>]
+<span class="ck">command</span> = <span class="cs">"cmd"</span>
+<span class="ck">args</span>  = [<span class="cs">"/c"</span>, <span class="cs">"uvx"</span>, <span class="cs">"blender-mcp"</span>]</code></pre></div></div>
+  <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">PowerShell</div></div>
+  <pre><code><span class="tp">PS></span> <span class="tc">New-Item -ItemType Directory -Force "$env:USERPROFILE\.codex"</span>
+<span class="tp">PS></span> <span class="tc">notepad "$env:USERPROFILE\.codex\config.toml"</span></code></pre></div>
+ </div>
+
+ <p>After saving: gear icon → <strong>Codex Settings</strong> → app reloads config. Blender tools appear in the available tools list when a thread is open.</p>
+</section>
+
+<!-- ══════════════════════════════════════════
+   CODEX CLI
+════════════════════════════════════════════ -->
+<section class="section" id="codex-cli">
+ <div class="srule"></div>
+ <div class="seyebrow"><span class="num">10</span> MCP Client</div>
+ <div class="phead">
+  <div class="picon" aria-hidden="true">⚡</div>
+  <div>
+   <div class="pname">Codex CLI</div>
+   <div class="psub">Terminal TUI · Open source · Built in Rust</div>
+  </div>
+  <a href="https://developers.openai.com/codex/mcp" target="_blank" rel="noopener noreferrer" class="pbadge" title="Official Codex MCP docs" style="text-decoration:none;">OFFICIAL DOCS ↗</a>
+ </div>
+ <p>The Codex CLI is open-source and written in Rust. Shares <code>~/.codex/config.toml</code> with the IDE Extension — configure once, both clients use it. <strong>Note:</strong> Windows support is experimental.</p>
+
+ <div class="os-block os-mac">
+  <div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg> macOS / <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C9.24 2 7 4.24 7 7c0 1.54.62 2.94 1.63 3.95C6.23 11.87 5 13.78 5 16c0 4.42 3.13 7 7 7s7-2.58 7-7c0-2.22-1.23-4.13-3.63-5.05C16.38 9.94 17 8.54 17 7c0-2.76-2.24-5-5-5zm-1.5 3.5c.69 0 1.25.56 1.25 1.25S11.19 8 10.5 8 9.25 7.44 9.25 6.75 9.81 5.5 10.5 5.5zm3 0c.69 0 1.25.56 1.25 1.25S14.19 8 13.5 8s-1.25-.56-1.25-1.25S12.81 5.5 13.5 5.5zM12 10.5c2.76 0 5 1.12 5 2.5 0 1-.89 1.88-2.19 2.31.12.31.19.64.19.99 0 1.93-1.35 3.2-3 3.2s-3-1.27-3-3.2c0-.35.07-.68.19-.99C7.89 14.88 7 14 7 13c0-1.38 2.24-2.5 5-2.5z"/></svg> Linux</div>
+  <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">Terminal</div></div>
+  <pre><code><span class="tp">$</span> <span class="tc">npm install -g @openai/codex</span>
+<span class="tp">$</span> <span class="tc">export OPENAI_API_KEY="sk-..."</span>
+
+<span class="cc"># Add BlenderMCP (writes to config.toml automatically)</span>
+<span class="tp">$</span> <span class="tc">codex mcp add blender -- uvx blender-mcp</span>
+<span class="tok">✓ Added MCP server 'blender' to ~/.codex/config.toml</span>
+
+<span class="cc"># Verify</span>
+<span class="tp">$</span> <span class="tc">codex mcp list</span>
+<span class="tok">blender  stdio  uvx blender-mcp</span>
+
+<span class="cc"># Launch interactive TUI</span>
+<span class="tp">$</span> <span class="tc">codex</span></code></pre></div>
+ </div>
+
+ <div class="os-block os-linux">
+  <div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C9.24 2 7 4.24 7 7c0 1.54.62 2.94 1.63 3.95C6.23 11.87 5 13.78 5 16c0 4.42 3.13 7 7 7s7-2.58 7-7c0-2.22-1.23-4.13-3.63-5.05C16.38 9.94 17 8.54 17 7c0-2.76-2.24-5-5-5zm-1.5 3.5c.69 0 1.25.56 1.25 1.25S11.19 8 10.5 8 9.25 7.44 9.25 6.75 9.81 5.5 10.5 5.5zm3 0c.69 0 1.25.56 1.25 1.25S14.19 8 13.5 8s-1.25-.56-1.25-1.25S12.81 5.5 13.5 5.5zM12 10.5c2.76 0 5 1.12 5 2.5 0 1-.89 1.88-2.19 2.31.12.31.19.64.19.99 0 1.93-1.35 3.2-3 3.2s-3-1.27-3-3.2c0-.35.07-.68.19-.99C7.89 14.88 7 14 7 13c0-1.38 2.24-2.5 5-2.5z"/></svg> Linux</div>
+  <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">Terminal</div></div>
+  <pre><code><span class="tp">$</span> <span class="tc">npm install -g @openai/codex</span>
+<span class="tp">$</span> <span class="tc">codex mcp add blender -- uvx blender-mcp</span>
+<span class="tp">$</span> <span class="tc">codex</span></code></pre></div>
+ </div>
+
+ <div class="os-block os-win">
+  <div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 12V6.75l6-1.32v6.48L3 12m17-9v8.75l-10 .15V5.21L20 3M3 13l6 .09v6.81l-6-1.15V13m17 .25V22l-10-1.91V13.1l10 .15z"/></svg> Windows</div>
+  <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">PowerShell</div></div>
+  <pre><code><span class="tp">PS></span> <span class="tc">npm install -g @openai/codex</span>
+<span class="tp">PS></span> <span class="tc">$env:OPENAI_API_KEY = "sk-..."</span>
+
+<span class="cc"># Windows needs cmd wrapper</span>
+<span class="tp">PS></span> <span class="tc">codex mcp add blender -- cmd /c uvx blender-mcp</span>
+<span class="tok">✓ Added MCP server 'blender'</span></code></pre></div>
+ </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+   WORKFLOWS
+════════════════════════════════════════════ -->
+<section class="section" id="wf1">
+ <div class="srule"></div>
+ <div class="seyebrow"><span class="num">11</span> Examples</div>
+ <h2>Workflows & <span class="ac">Results</span></h2>
+ <p>Real prompts and the tool calls they trigger. Requires Blender open with <strong>Connect to Claude</strong> active.</p>
+
+ <div class="wf">
+  <div class="wfh"><div class="wfn">01</div><div><div class="wft">Scene Creation</div><div class="wfd">Build a full 3D scene from a single prompt</div></div><div class="wfb a">BEGINNER</div></div>
+  <div class="wfbody">
+   <div class="pbox"><div class="plabel">🗣 Prompt</div><div class="ptext">"Create a low poly scene in a dungeon, with a dragon guarding a pot of gold."</div></div>
+   <div class="cb teal"><div class="cbh"><span class="cbf">MCP tool sequence</span><span class="cbl">calls</span></div>
+   <pre><code><span class="cf">get_scene_info</span>()
+<span class="cf">execute_blender_code</span>({ <span class="ck">code</span>: <span class="cs">"... dungeon walls, floor, torches ..."</span> })
+<span class="cf">execute_blender_code</span>({ <span class="ck">code</span>: <span class="cs">"... low-poly dragon mesh ..."</span> })
+<span class="cf">set_material</span>({ <span class="ck">object</span>: <span class="cs">"Dragon"</span>,  <span class="ck">color</span>: [<span class="cn">0.2</span>, <span class="cn">0.6</span>, <span class="cn">0.2</span>] })
+<span class="cf">set_material</span>({ <span class="ck">object</span>: <span class="cs">"GoldCoins"</span>, <span class="ck">color</span>: [<span class="cn">1.0</span>, <span class="cn">0.8</span>, <span class="cn">0.0</span>] })</code></pre></div>
+   <div class="rbox"><div class="rlabel">✅ Result</div><div class="rtext"><ul>
+    <li>Dungeon assembled — stone walls, floor, torchlight</li>
+    <li>Low-poly dragon with correct materials, gold coins</li>
+    <li>Objects named and organized in Outliner</li>
+   </ul></div></div>
+  </div>
+ </div>
+
+ <div class="wf" id="wf2">
+  <div class="wfh"><div class="wfn">02</div><div><div class="wft">Materials from Natural Language</div><div class="wfd">Describe appearance, get accurate Principled BSDF setups</div></div><div class="wfb t">BEGINNER</div></div>
+  <div class="wfbody">
+   <div class="pbox"><div class="plabel">🗣 Prompt</div><div class="ptext">"Make this car red and metallic."</div></div>
+   <div class="cb"><div class="cbh"><span class="cbf">execute_blender_code</span><span class="cbl">python</span></div>
+   <pre><code><span class="cw">import</span> bpy
+mat = bpy.data.materials.<span class="cf">new</span>(<span class="cs">"MetallicRed"</span>)
+mat.use_nodes = <span class="cw">True</span>
+bsdf = mat.node_tree.nodes[<span class="cs">"Principled BSDF"</span>]
+bsdf.inputs[<span class="cs">"Base Color"</span>].default_value = (<span class="cn">0.8</span>, <span class="cn">0.02</span>, <span class="cn">0.02</span>, <span class="cn">1.0</span>)
+bsdf.inputs[<span class="cs">"Metallic"</span>].default_value  = <span class="cn">0.9</span>
+bsdf.inputs[<span class="cs">"Roughness"</span>].default_value = <span class="cn">0.2</span>
+bpy.data.objects[<span class="cs">"Car"</span>].data.materials.append(mat)</code></pre></div>
+   <div class="rbox"><div class="rlabel">✅ Result</div><div class="rtext"><ul>
+    <li>Car turns metallic red immediately</li>
+    <li>Metallic=0.9 gives realistic paintwork sheen</li>
+   </ul></div></div>
+  </div>
+ </div>
+
+ <div class="wf" id="wf3">
+  <div class="wfh"><div class="wfn">03</div><div><div class="wft">Procedural Python Scripting</div><div class="wfd">Loops, randomization, parametric geometry</div></div><div class="wfb b">ADVANCED</div></div>
+  <div class="wfbody">
+   <div class="pbox"><div class="plabel">🗣 Prompt</div><div class="ptext">"Create a 5×5 grid of cubes, each with a randomized height between 0.5 and 3 units."</div></div>
+   <div class="cb blue"><div class="cbh"><span class="cbf">execute_blender_code</span><span class="cbl">python</span></div>
+   <pre><code><span class="cw">import</span> bpy, random
+bpy.ops.object.select_all(action=<span class="cs">'SELECT'</span>)
+bpy.ops.object.delete()
+<span class="cw">for</span> x <span class="cw">in</span> <span class="cf">range</span>(<span class="cn">5</span>):
+  <span class="cw">for</span> y <span class="cw">in</span> <span class="cf">range</span>(<span class="cn">5</span>):
+    h = random.uniform(<span class="cn">0.5</span>, <span class="cn">3.0</span>)
+    bpy.ops.mesh.primitive_cube_add(location=(x*<span class="cn">1.2</span>, y*<span class="cn">1.2</span>, h/<span class="cn">2</span>))
+    bpy.context.active_object.scale = (<span class="cn">0.4</span>, <span class="cn">0.4</span>, h/<span class="cn">2</span>)
+    bpy.context.active_object.name = <span class="cf">f</span><span class="cs">"Column_{x}_{y}"</span></code></pre></div>
+   <div class="rbox"><div class="rlabel">✅ Result</div><div class="rtext"><ul>
+    <li>25 columns in a 5×5 grid with city skyline effect</li>
+    <li>Each uniquely named in Outliner</li>
+   </ul></div></div>
+  </div>
+ </div>
+
+ <div class="wf" id="wf4">
+  <div class="wfh"><div class="wfn">04</div><div><div class="wft">Camera & Lighting</div><div class="wfd">Isometric camera, studio three-point lighting</div></div><div class="wfb t">INTERMEDIATE</div></div>
+  <div class="wfbody">
+   <div class="pbox"><div class="plabel">🗣 Prompt</div><div class="ptext">"Point the camera isometrically at the scene. Add studio lighting."</div></div>
+   <div class="cb"><div class="cbh"><span class="cbf">execute_blender_code</span><span class="cbl">python</span></div>
+   <pre><code><span class="cw">import</span> bpy, math
+cam = bpy.data.objects[<span class="cs">"Camera"</span>]
+cam.location = (<span class="cn">7</span>, <span class="cn">-7</span>, <span class="cn">7</span>)
+cam.rotation_euler = (math.radians(<span class="cn">60</span>), <span class="cn">0</span>, math.radians(<span class="cn">45</span>))
+cam.data.type = <span class="cs">'ORTHO'</span>; cam.data.ortho_scale = <span class="cn">8</span>
+<span class="cw">for</span> name, loc, energy <span class="cw">in</span> [(<span class="cs">"Key"</span>,(<span class="cn">4</span>,<span class="cn">-4</span>,<span class="cn">6</span>),<span class="cn">1000</span>),(<span class="cs">"Fill"</span>,(<span class="cn">-4</span>,<span class="cn">-2</span>,<span class="cn">4</span>),<span class="cn">300</span>),(<span class="cs">"Back"</span>,(<span class="cn">0</span>,<span class="cn">5</span>,<span class="cn">5</span>),<span class="cn">200</span>)]:
+  bpy.ops.object.light_add(type=<span class="cs">'AREA'</span>, location=loc)
+  bpy.context.active_object.data.energy = energy</code></pre></div>
+   <div class="rbox"><div class="rlabel">✅ Result</div><div class="rtext"><ul>
+    <li>Orthographic isometric camera at 45°/60°</li>
+    <li>Three-point studio lighting (key, fill, back)</li>
+    <li>Press <kbd>Numpad 0</kbd> to preview; <kbd>F12</kbd> to render</li>
+   </ul></div></div>
+  </div>
+ </div>
+
+ <div class="wf" id="wf5">
+  <div class="wfh"><div class="wfn">05</div><div><div class="wft">Poly Haven Beach Scene</div><div class="wfd">HDRIs, textures, and models via Poly Haven API</div></div><div class="wfb g">INTERMEDIATE</div></div>
+  <div class="wfbody">
+   <div class="pbox"><div class="plabel">🗣 Prompt</div><div class="ptext">"Create a beach scene using Poly Haven HDRIs, sand texture, and rock models."</div></div>
+   <div class="call warn" style="margin-top:8px;"><div class="cicon">⚠️</div><p>The <strong>Poly Haven checkbox</strong> must be checked in the BlenderMCP tab <em>before</em> clicking Connect to Claude.</p></div>
+   <div class="cb green"><div class="cbh"><span class="cbf">MCP tool sequence</span><span class="cbl">calls</span></div>
+   <pre><code><span class="cf">get_polyhaven_asset</span>({ <span class="ck">asset_id</span>:<span class="cs">"venice_sunset"</span>, <span class="ck">type</span>:<span class="cs">"hdri"</span>,  <span class="ck">res</span>:<span class="cs">"2k"</span> })
+<span class="cf">get_polyhaven_asset</span>({ <span class="ck">asset_id</span>:<span class="cs">"sand_01"</span>,    <span class="ck">type</span>:<span class="cs">"texture"</span>, <span class="ck">res</span>:<span class="cs">"2k"</span> })
+<span class="cf">get_polyhaven_asset</span>({ <span class="ck">asset_id</span>:<span class="cs">"rock_moss_set"</span>, <span class="ck">type</span>:<span class="cs">"model"</span> })</code></pre></div>
+   <div class="rbox"><div class="rlabel">✅ Result</div><div class="rtext"><ul>
+    <li>Sunset HDRI applied to World — golden-hour lighting</li>
+    <li>Sand texture with albedo, roughness, normal maps</li>
+    <li>Rock models imported — press F12 for Cycles render</li>
+   </ul></div></div>
+  </div>
+ </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+   TELEMETRY
+════════════════════════════════════════════ -->
+<section class="section" id="telemetry">
+ <div class="srule"></div>
+ <div class="seyebrow"><span class="num">12</span> Privacy</div>
+ <h2><span class="ac">Telemetry</span> Control</h2>
+
+ <div class="tw"><table>
+  <tr><th>State</th><th>What's Collected</th></tr>
+  <tr><td><strong>Consent given</strong></td><td>Anonymized prompts, code snippets, viewport screenshots</td></tr>
+  <tr><td><strong>No consent</strong></td><td>Tool names, success/fail, duration only</td></tr>
+  <tr><td><code>DISABLE_TELEMETRY=true</code></td><td>Nothing collected</td></tr>
+ </table></div>
+
+ <p><strong>In Blender:</strong> <kbd>Edit</kbd> → <kbd>Preferences</kbd> → <kbd>Add-ons</kbd> → <strong>Blender MCP</strong> → uncheck telemetry consent.</p>
+ <div class="cfile"><div class="cfh"><span>📄</span><span class="cfpath">Any client config — disable telemetry</span><span class="cftag">JSON</span></div>
+ <div class="cb" style="margin:0;border:none;border-left:3px solid var(--or);">
+ <pre><code>{
+ <span class="ck">"mcpServers"</span>: { <span class="ck">"blender"</span>: {
+   <span class="ck">"command"</span>:<span class="cs">"uvx"</span>, <span class="ck">"args"</span>:[<span class="cs">"blender-mcp"</span>],
+   <span class="ck">"env"</span>: { <span class="ck">"DISABLE_TELEMETRY"</span>: <span class="cs">"true"</span> }
+ }}
+}</code></pre></div></div>
+</section>
+
+<!-- ══════════════════════════════════════════
+   TROUBLESHOOTING
+════════════════════════════════════════════ -->
+<section class="section" id="troubleshoot">
+ <div class="srule"></div>
+ <div class="seyebrow"><span class="num">13</span> Help</div>
+ <h2>Troubleshooting</h2>
+ <p style="font-size:12.5px;color:var(--text3);margin-bottom:14px;">Click to expand. Issues ordered by how often they occur.</p>
+
+ <div class="issue open" style="border-color:rgba(244,63,94,.35);" id="ts-python">
+  <div class="issueh" style="background:rgba(244,63,94,.07);" role="button" tabindex="0" onclick="toggleIssue(this.parentElement)" aria-expanded="true">
+   <div class="issueh-left">
+    <div class="issueh-chevron"><svg width="7" height="11" viewBox="0 0 7 11" fill="none"><path d="M1 1l4 4.5L1 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <span>Wrong Python version — MCP server won't start</span>
+   </div>
+   <span class="issuetag" style="background:rgba(244,63,94,.15);">PYTHON 3.12 ONLY</span>
+  </div>
+  <div class="issuebody">
+   <p><strong>BlenderMCP requires exactly Python 3.12.</strong> Running under 3.11 or 3.13+ causes silent failures. Most common cause of "tools not loading."</p>
+
+   <div class="os-block os-mac">
+    <div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg> macOS / <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C9.24 2 7 4.24 7 7c0 1.54.62 2.94 1.63 3.95C6.23 11.87 5 13.78 5 16c0 4.42 3.13 7 7 7s7-2.58 7-7c0-2.22-1.23-4.13-3.63-5.05C16.38 9.94 17 8.54 17 7c0-2.76-2.24-5-5-5zm-1.5 3.5c.69 0 1.25.56 1.25 1.25S11.19 8 10.5 8 9.25 7.44 9.25 6.75 9.81 5.5 10.5 5.5zm3 0c.69 0 1.25.56 1.25 1.25S14.19 8 13.5 8s-1.25-.56-1.25-1.25S12.81 5.5 13.5 5.5zM12 10.5c2.76 0 5 1.12 5 2.5 0 1-.89 1.88-2.19 2.31.12.31.19.64.19.99 0 1.93-1.35 3.2-3 3.2s-3-1.27-3-3.2c0-.35.07-.68.19-.99C7.89 14.88 7 14 7 13c0-1.38 2.24-2.5 5-2.5z"/></svg> Linux</div>
+    <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">Check & fix</div></div>
+    <pre><code><span class="tp">$</span> <span class="tc">python3 --version</span>
+<span class="tok">Python 3.12.x ← correct</span>
+<span class="terr">Python 3.11.x ← wrong, will fail</span>
+
+<span class="cc"># Install 3.12 via uv</span>
+<span class="tp">$</span> <span class="tc">uv python install 3.12</span></code></pre></div>
+   </div>
+   <div class="os-block os-linux">
+    <div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C9.24 2 7 4.24 7 7c0 1.54.62 2.94 1.63 3.95C6.23 11.87 5 13.78 5 16c0 4.42 3.13 7 7 7s7-2.58 7-7c0-2.22-1.23-4.13-3.63-5.05C16.38 9.94 17 8.54 17 7c0-2.76-2.24-5-5-5zm-1.5 3.5c.69 0 1.25.56 1.25 1.25S11.19 8 10.5 8 9.25 7.44 9.25 6.75 9.81 5.5 10.5 5.5zm3 0c.69 0 1.25.56 1.25 1.25S14.19 8 13.5 8s-1.25-.56-1.25-1.25S12.81 5.5 13.5 5.5zM12 10.5c2.76 0 5 1.12 5 2.5 0 1-.89 1.88-2.19 2.31.12.31.19.64.19.99 0 1.93-1.35 3.2-3 3.2s-3-1.27-3-3.2c0-.35.07-.68.19-.99C7.89 14.88 7 14 7 13c0-1.38 2.24-2.5 5-2.5z"/></svg> Linux</div>
+    <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">Check & fix</div></div>
+    <pre><code><span class="tp">$</span> <span class="tc">python3 --version</span>
+<span class="tok">Python 3.12.x ← correct</span>
+<span class="tp">$</span> <span class="tc">uv python install 3.12</span></code></pre></div>
+   </div>
+   <div class="os-block os-win">
+    <div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 12V6.75l6-1.32v6.48L3 12m17-9v8.75l-10 .15V5.21L20 3M3 13l6 .09v6.81l-6-1.15V13m17 .25V22l-10-1.91V13.1l10 .15z"/></svg> Windows</div>
+    <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">PowerShell</div></div>
+    <pre><code><span class="tp">PS></span> <span class="tc">python --version</span>
+<span class="tok">Python 3.12.x ← correct</span>
+<span class="tp">PS></span> <span class="tc">uv python install 3.12</span></code></pre></div>
+   </div>
+
+   <p style="margin-top:8px;">Pin 3.12 in your config args: <code>"args": ["--python", "3.12", "blender-mcp"]</code></p>
+   <div class="cfile"><div class="cfh"><span>📄</span><span class="cfpath">claude_desktop_config.json — pinned Python 3.12</span><span class="cftag">JSON</span></div>
+   <div class="cb" style="margin:0;border:none;border-left:3px solid var(--rose);">
+   <pre><code>{
+ <span class="ck">"mcpServers"</span>: {
+  <span class="ck">"blender"</span>: {
+   <span class="ck">"command"</span>: <span class="cs">"uvx"</span>,
+   <span class="ck">"args"</span>: [<span class="cs">"--python"</span>, <span class="cs">"3.12"</span>, <span class="cs">"blender-mcp"</span>]
+  }
+ }
+}</code></pre></div></div>
+  </div>
+ </div>
+
+ <div class="issue">
+  <div class="issueh" role="button" tabindex="0" onclick="toggleIssue(this.parentElement)" aria-expanded="false">
+   <div class="issueh-left">
+    <div class="issueh-chevron"><svg width="7" height="11" viewBox="0 0 7 11" fill="none"><path d="M1 1l4 4.5L1 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <span>Connection refused on port 9876</span>
+   </div>
+   <span class="issuetag">BLENDER</span>
+  </div>
+  <div class="issuebody">
+   <p>The Blender addon socket is not open. N-panel → <strong>BlenderMCP</strong> tab → click <strong>Connect to Claude</strong>.</p>
+   <div class="os-block os-mac"><div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg> macOS / <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C9.24 2 7 4.24 7 7c0 1.54.62 2.94 1.63 3.95C6.23 11.87 5 13.78 5 16c0 4.42 3.13 7 7 7s7-2.58 7-7c0-2.22-1.23-4.13-3.63-5.05C16.38 9.94 17 8.54 17 7c0-2.76-2.24-5-5-5zm-1.5 3.5c.69 0 1.25.56 1.25 1.25S11.19 8 10.5 8 9.25 7.44 9.25 6.75 9.81 5.5 10.5 5.5zm3 0c.69 0 1.25.56 1.25 1.25S14.19 8 13.5 8s-1.25-.56-1.25-1.25S12.81 5.5 13.5 5.5zM12 10.5c2.76 0 5 1.12 5 2.5 0 1-.89 1.88-2.19 2.31.12.31.19.64.19.99 0 1.93-1.35 3.2-3 3.2s-3-1.27-3-3.2c0-.35.07-.68.19-.99C7.89 14.88 7 14 7 13c0-1.38 2.24-2.5 5-2.5z"/></svg> Linux</div>
+    <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">Test</div></div>
+    <pre><code><span class="tp">$</span> <span class="tc">nc -zv localhost 9876</span>
+<span class="tok">succeeded! ← open</span>
+<span class="terr">refused   ← click Connect to Claude in Blender</span></code></pre></div>
+   </div>
+   <div class="os-block os-linux"><div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C9.24 2 7 4.24 7 7c0 1.54.62 2.94 1.63 3.95C6.23 11.87 5 13.78 5 16c0 4.42 3.13 7 7 7s7-2.58 7-7c0-2.22-1.23-4.13-3.63-5.05C16.38 9.94 17 8.54 17 7c0-2.76-2.24-5-5-5zm-1.5 3.5c.69 0 1.25.56 1.25 1.25S11.19 8 10.5 8 9.25 7.44 9.25 6.75 9.81 5.5 10.5 5.5zm3 0c.69 0 1.25.56 1.25 1.25S14.19 8 13.5 8s-1.25-.56-1.25-1.25S12.81 5.5 13.5 5.5zM12 10.5c2.76 0 5 1.12 5 2.5 0 1-.89 1.88-2.19 2.31.12.31.19.64.19.99 0 1.93-1.35 3.2-3 3.2s-3-1.27-3-3.2c0-.35.07-.68.19-.99C7.89 14.88 7 14 7 13c0-1.38 2.24-2.5 5-2.5z"/></svg> Linux</div>
+    <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">Test</div></div>
+    <pre><code><span class="tp">$</span> <span class="tc">nc -zv localhost 9876</span></code></pre></div>
+   </div>
+   <div class="os-block os-win"><div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 12V6.75l6-1.32v6.48L3 12m17-9v8.75l-10 .15V5.21L20 3M3 13l6 .09v6.81l-6-1.15V13m17 .25V22l-10-1.91V13.1l10 .15z"/></svg> Windows</div>
+    <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">PowerShell</div></div>
+    <pre><code><span class="tp">PS></span> <span class="tc">Test-NetConnection -ComputerName localhost -Port 9876</span>
+<span class="tok">TcpTestSucceeded : True  ← connected</span></code></pre></div>
+   </div>
+   <p>From the README: <em>"Sometimes the first command won't go through — retry once before restarting."</em></p>
+  </div>
+ </div>
+
+ <div class="issue">
+  <div class="issueh" role="button" tabindex="0" onclick="toggleIssue(this.parentElement)" aria-expanded="false">
+   <div class="issueh-left">
+    <div class="issueh-chevron"><svg width="7" height="11" viewBox="0 0 7 11" fill="none"><path d="M1 1l4 4.5L1 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <span>MCP server doesn't appear after config</span>
+   </div>
+   <span class="issuetag">CONFIG</span>
+  </div>
+  <div class="issuebody">
+   <p>Validate config syntax — a single bad character breaks everything silently.</p>
+   <div class="os-block os-mac"><div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg> macOS / <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C9.24 2 7 4.24 7 7c0 1.54.62 2.94 1.63 3.95C6.23 11.87 5 13.78 5 16c0 4.42 3.13 7 7 7s7-2.58 7-7c0-2.22-1.23-4.13-3.63-5.05C16.38 9.94 17 8.54 17 7c0-2.76-2.24-5-5-5zm-1.5 3.5c.69 0 1.25.56 1.25 1.25S11.19 8 10.5 8 9.25 7.44 9.25 6.75 9.81 5.5 10.5 5.5zm3 0c.69 0 1.25.56 1.25 1.25S14.19 8 13.5 8s-1.25-.56-1.25-1.25S12.81 5.5 13.5 5.5zM12 10.5c2.76 0 5 1.12 5 2.5 0 1-.89 1.88-2.19 2.31.12.31.19.64.19.99 0 1.93-1.35 3.2-3 3.2s-3-1.27-3-3.2c0-.35.07-.68.19-.99C7.89 14.88 7 14 7 13c0-1.38 2.24-2.5 5-2.5z"/></svg> Linux</div>
+    <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">Validate JSON config</div></div>
+    <pre><code><span class="tp">$</span> <span class="tc">python3 -m json.tool ~/Library/Application\ Support/Claude/claude_desktop_config.json</span></code></pre></div>
+   </div>
+   <div class="os-block os-linux"><div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C9.24 2 7 4.24 7 7c0 1.54.62 2.94 1.63 3.95C6.23 11.87 5 13.78 5 16c0 4.42 3.13 7 7 7s7-2.58 7-7c0-2.22-1.23-4.13-3.63-5.05C16.38 9.94 17 8.54 17 7c0-2.76-2.24-5-5-5zm-1.5 3.5c.69 0 1.25.56 1.25 1.25S11.19 8 10.5 8 9.25 7.44 9.25 6.75 9.81 5.5 10.5 5.5zm3 0c.69 0 1.25.56 1.25 1.25S14.19 8 13.5 8s-1.25-.56-1.25-1.25S12.81 5.5 13.5 5.5zM12 10.5c2.76 0 5 1.12 5 2.5 0 1-.89 1.88-2.19 2.31.12.31.19.64.19.99 0 1.93-1.35 3.2-3 3.2s-3-1.27-3-3.2c0-.35.07-.68.19-.99C7.89 14.88 7 14 7 13c0-1.38 2.24-2.5 5-2.5z"/></svg> Linux</div>
+    <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">Validate JSON</div></div>
+    <pre><code><span class="tp">$</span> <span class="tc">python3 -m json.tool ~/.config/Claude/claude_desktop_config.json</span></code></pre></div>
+   </div>
+   <div class="os-block os-win"><div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 12V6.75l6-1.32v6.48L3 12m17-9v8.75l-10 .15V5.21L20 3M3 13l6 .09v6.81l-6-1.15V13m17 .25V22l-10-1.91V13.1l10 .15z"/></svg> Windows</div>
+    <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">PowerShell</div></div>
+    <pre><code><span class="tp">PS></span> <span class="tc">Get-Content "$env:APPDATA\Claude\claude_desktop_config.json" | ConvertFrom-Json</span></code></pre></div>
+   </div>
+   <p>Common mistakes: trailing commas in JSON; <code>config.yaml</code> instead of <code>config.toml</code> for Codex; JSON syntax inside TOML. After fixing, <strong>fully quit and relaunch</strong> your AI client.</p>
+  </div>
+ </div>
+
+ <div class="issue">
+  <div class="issueh" role="button" tabindex="0" onclick="toggleIssue(this.parentElement)" aria-expanded="false">
+   <div class="issueh-left">
+    <div class="issueh-chevron"><svg width="7" height="11" viewBox="0 0 7 11" fill="none"><path d="M1 1l4 4.5L1 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <span>uvx: command not found</span>
+   </div>
+   <span class="issuetag">PATH</span>
+  </div>
+  <div class="issuebody">
+   <div class="os-block os-mac"><div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg> macOS</div>
+    <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">Fix</div></div>
+    <pre><code><span class="tp">$</span> <span class="tc">brew install uv && source ~/.zshrc</span>
+<span class="cc"># Or use full path: "/opt/homebrew/bin/uvx" in config</span></code></pre></div>
+   </div>
+   <div class="os-block os-linux"><div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C9.24 2 7 4.24 7 7c0 1.54.62 2.94 1.63 3.95C6.23 11.87 5 13.78 5 16c0 4.42 3.13 7 7 7s7-2.58 7-7c0-2.22-1.23-4.13-3.63-5.05C16.38 9.94 17 8.54 17 7c0-2.76-2.24-5-5-5zm-1.5 3.5c.69 0 1.25.56 1.25 1.25S11.19 8 10.5 8 9.25 7.44 9.25 6.75 9.81 5.5 10.5 5.5zm3 0c.69 0 1.25.56 1.25 1.25S14.19 8 13.5 8s-1.25-.56-1.25-1.25S12.81 5.5 13.5 5.5zM12 10.5c2.76 0 5 1.12 5 2.5 0 1-.89 1.88-2.19 2.31.12.31.19.64.19.99 0 1.93-1.35 3.2-3 3.2s-3-1.27-3-3.2c0-.35.07-.68.19-.99C7.89 14.88 7 14 7 13c0-1.38 2.24-2.5 5-2.5z"/></svg> Linux</div>
+    <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">Fix</div></div>
+    <pre><code><span class="tp">$</span> <span class="tc">echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc && source ~/.bashrc</span></code></pre></div>
+   </div>
+   <div class="os-block os-win"><div class="os-tag"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 12V6.75l6-1.32v6.48L3 12m17-9v8.75l-10 .15V5.21L20 3M3 13l6 .09v6.81l-6-1.15V13m17 .25V22l-10-1.91V13.1l10 .15z"/></svg> Windows</div>
+    <div class="term"><div class="tbar"><div class="td r"></div><div class="td y"></div><div class="td g"></div><div class="ttitle">PowerShell (Admin)</div></div>
+    <pre><code><span class="tp">PS></span> <span class="tc">$p = [Environment]::GetEnvironmentVariable("Path","User")</span>
+<span class="tp">PS></span> <span class="tc">[Environment]::SetEnvironmentVariable("Path","$p;$env:USERPROFILE\.local\bin","User")</span>
+<span class="cc"># Restart Claude / Cursor after this</span></code></pre></div>
+   </div>
+  </div>
+ </div>
+
+ <div class="issue">
+  <div class="issueh" role="button" tabindex="0" onclick="toggleIssue(this.parentElement)" aria-expanded="false">
+   <div class="issueh-left">
+    <div class="issueh-chevron"><svg width="7" height="11" viewBox="0 0 7 11" fill="none"><path d="M1 1l4 4.5L1 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <span>Codex config not being read</span>
+   </div>
+   <span class="issuetag">CODEX FORMAT</span>
+  </div>
+  <div class="issuebody">
+   <p>Codex uses <strong>TOML</strong> at <code>~/.codex/config.toml</code>. A <code>config.yaml</code> is silently ignored.</p>
+   <div class="cb amber"><div class="cbh"><span class="cbf">Correct format</span><span class="cbl">TOML</span></div>
+   <pre><code>[<span class="co">mcp_servers.blender</span>]
+<span class="ck">command</span> = <span class="cs">"uvx"</span>
+<span class="ck">args</span> = [<span class="cs">"blender-mcp"</span>]</code></pre></div>
+   <p>Or let the CLI write it: <code>codex mcp add blender -- uvx blender-mcp</code></p>
+  </div>
+ </div>
+
+ <div class="issue">
+  <div class="issueh" role="button" tabindex="0" onclick="toggleIssue(this.parentElement)" aria-expanded="false">
+   <div class="issueh-left">
+    <div class="issueh-chevron"><svg width="7" height="11" viewBox="0 0 7 11" fill="none"><path d="M1 1l4 4.5L1 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <span>Timeout or complex request fails mid-way</span>
+   </div>
+   <span class="issuetag">TIMEOUT</span>
+  </div>
+  <div class="issuebody">
+   <p>Break requests into smaller steps: "Add the keep" → "Add outer walls" → "Apply stone texture."</p>
+   <p>From the README: <em>"Have you tried turning it off and on again? Restart both Claude and the Blender server."</em></p>
+  </div>
+ </div>
+
+ <div class="issue">
+  <div class="issueh" role="button" tabindex="0" onclick="toggleIssue(this.parentElement)" aria-expanded="false">
+   <div class="issueh-left">
+    <div class="issueh-chevron"><svg width="7" height="11" viewBox="0 0 7 11" fill="none"><path d="M1 1l4 4.5L1 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <span>execute_blender_code — Blender crashes or hangs</span>
+   </div>
+   <span class="issuetag">SAFETY</span>
+  </div>
+  <div class="issuebody">
+   <p><kbd>⌘ S</kbd> / <kbd>Ctrl S</kbd> — save your .blend file <strong>before</strong> every AI session. Enable auto-save: <kbd>Edit</kbd> → <kbd>Preferences</kbd> → <kbd>Save & Load</kbd>.</p>
+   <p>From the README: <em>"execute_blender_code runs arbitrary Python — powerful but potentially dangerous. ALWAYS save your work."</em></p>
+  </div>
+ </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+   QUICK REFERENCE
+════════════════════════════════════════════ -->
+<section class="section" id="quickref">
+ <div class="srule"></div>
+ <div class="seyebrow"><span class="num">14</span> Reference</div>
+ <h2>Quick <span class="ac">Reference</span></h2>
+
+ <h3>Config Files by Client</h3>
+ <div class="tw"><table>
+  <caption class="sr-only">Config file locations by MCP client</caption><tr><th scope="col">Client</th><th scope="col">Config File</th><th scope="col">Format</th><th scope="col">Key</th></tr>
+  <tr><td><strong>Claude Desktop (Mac)</strong></td><td><code>~/Library/Application Support/Claude/claude_desktop_config.json</code></td><td>JSON</td><td><code>mcpServers</code></td></tr>
+  <tr><td><strong>Claude Desktop (Win)</strong></td><td><code>%APPDATA%\Claude\claude_desktop_config.json</code></td><td>JSON</td><td><code>mcpServers</code></td></tr>
+  <tr><td><strong>Claude Code CLI</strong></td><td><code>claude mcp add blender uvx blender-mcp</code></td><td>—</td><td>—</td></tr>
+  <tr><td><strong>Cursor (global)</strong></td><td><code>~/.cursor/mcp.json</code></td><td>JSON</td><td><code>mcpServers</code></td></tr>
+  <tr><td><strong>VS Code Cline</strong></td><td><code>cline_mcp_settings.json</code></td><td>JSON</td><td><code>mcpServers</code></td></tr>
+  <tr><td><strong>VS Code Copilot</strong></td><td>User <code>settings.json</code></td><td>JSON</td><td><code>github.copilot.chat.mcp.servers</code></td></tr>
+  <tr><td><strong>Antigravity</strong></td><td>Settings UI or config JSON</td><td>JSON</td><td><code>servers</code></td></tr>
+  <tr><td><strong>Codex (CLI + IDE Extension)</strong></td><td><code>~/.codex/config.toml</code></td><td><strong>TOML</strong></td><td><code>[mcp_servers.blender]</code></td></tr>
+ </table></div>
+
+ <h3>Key Facts</h3>
+ <div class="tw"><table>
+  <caption class="sr-only">Key facts about BlenderMCP</caption><tr><th scope="col">Item</th><th scope="col">Correct Value</th></tr>
+  <tr><td>Addon filename</td><td><code>addon.py</code> — at repo root</td></tr>
+  <tr><td>Blender minimum</td><td><strong>3.0</strong></td></tr>
+  <tr><td>Python version</td><td><strong style="color:var(--rose)">3.12 exactly</strong></td></tr>
+  <tr><td>N-panel tab name</td><td><strong>BlenderMCP</strong></td></tr>
+  <tr><td>Button to click</td><td><strong>Connect to Claude</strong></td></tr>
+  <tr><td>Default port</td><td>9876 (env: <code>BLENDER_PORT</code>)</td></tr>
+  <tr><td>Run uvx manually?</td><td><strong>No</strong> — client does it</td></tr>
+  <tr><td>Multiple clients at once?</td><td><strong>No</strong></td></tr>
+  <tr><td>Codex config format</td><td><strong>TOML</strong> (<code>config.toml</code>)</td></tr>
+  <tr><td>Official website?</td><td>None — GitHub only</td></tr>
+  <tr><td>Current version</td><td>1.5.5 · MIT</td></tr>
+ </table></div>
+
+ <h3>Community & Resources</h3>
+ <div class="fgrid">
+  <div class="fi o"><div class="fin">GitHub Repo</div><div class="fid"><a href="https://github.com/ahujasid/blender-mcp" target="_blank" rel="noopener noreferrer">ahujasid/blender-mcp</a></div></div>
+  <div class="fi t"><div class="fin">Discord Community</div><div class="fid"><a href="https://discord.gg/z5apgR8TFU" target="_blank" rel="noopener noreferrer">discord.gg/z5apgR8TFU</a></div></div>
+  <div class="fi b"><div class="fin">MCP Protocol Spec</div><div class="fid"><a href="https://modelcontextprotocol.io" target="_blank" rel="noopener noreferrer">modelcontextprotocol.io</a></div></div>
+  <div class="fi g"><div class="fin">Tutorial Video</div><div class="fid"><a href="https://www.youtube.com/watch?v=lCyQ717DuzQ" target="_blank" rel="noopener noreferrer">Full Setup Tutorial (YouTube)</a></div></div>
+  <div class="fi o"><div class="fin">Claude Desktop MCP Docs</div><div class="fid"><a href="https://support.claude.com/en/articles/10949351-getting-started-with-local-mcp-servers-on-claude-desktop" target="_blank" rel="noopener noreferrer">support.claude.com ↗</a></div></div>
+  <div class="fi t"><div class="fin">Cursor MCP Docs</div><div class="fid"><a href="https://docs.cursor.com/context/model-context-protocol" target="_blank" rel="noopener noreferrer">docs.cursor.com ↗</a></div></div>
+  <div class="fi b"><div class="fin">VS Code MCP Docs</div><div class="fid"><a href="https://code.visualstudio.com/docs/copilot/customization/mcp-servers" target="_blank" rel="noopener noreferrer">code.visualstudio.com ↗</a></div></div>
+  <div class="fi g"><div class="fin">OpenAI Codex Docs</div><div class="fid"><a href="https://developers.openai.com/codex/" target="_blank" rel="noopener noreferrer">developers.openai.com/codex ↗</a></div></div>
+ </div>
+</section>
+
+</div><!-- /content -->
+</main><!-- /main -->
+</div><!-- /app -->
+
+<script>
+/* ═══════════════════════════════════════════════
+  SIDEBAR / NAV TOGGLE
+  Works on both desktop (collapse) and mobile (drawer)
+═══════════════════════════════════════════════ */
+const MOBILE_BP = 768;
+
+function isMobile(){ return window.innerWidth < MOBILE_BP; }
+
+function toggleNav(){
+ if(isMobile()){
+  const open = document.body.classList.toggle('sidebar-open');
+  document.getElementById('sidebar-overlay').style.display = open ? 'block' : 'none';
+  document.getElementById('sidebar-toggle-btn').setAttribute('aria-expanded', open);
+ } else {
+  const collapsed = document.body.classList.toggle('nav-collapsed');
+  document.getElementById('sidebar-toggle-btn').setAttribute('aria-expanded', !collapsed);
+  try{ localStorage.setItem('bmcp-nav-collapsed', collapsed ? '1' : '0'); }catch(e){}
+ }
+}
+
+function closeSidebar(){
+ document.body.classList.remove('sidebar-open');
+ document.getElementById('sidebar-overlay').style.display = 'none';
+}
+
+// Restore desktop collapse state
+(function(){
+ try{
+  if(!isMobile() && localStorage.getItem('bmcp-nav-collapsed') === '1'){
+   document.body.classList.add('nav-collapsed');
+   document.getElementById('sidebar-toggle-btn').setAttribute('aria-expanded','false');
+  }
+ }catch(e){}
+})();
+
+// Close drawer on resize to desktop
+window.addEventListener('resize', ()=>{
+ if(!isMobile()) closeSidebar();
+});
+
+/* ═══════════════════════════════════════════════
+  GLOBAL OS SELECTOR
+═══════════════════════════════════════════════ */
+function setOS(os){
+ document.documentElement.dataset.os = os;
+ document.querySelectorAll('.os-btn').forEach(b=>{
+  const active = b.classList.contains(os);
+  b.classList.toggle('active', active);
+  b.setAttribute('aria-pressed', active ? 'true' : 'false');
+ });
+ try{ localStorage.setItem('bmcp-os', os); }catch(e){}
+ // Announce to screen readers
+ const label = {mac:'macOS',win:'Windows',linux:'Linux'}[os];
+ announce('Platform set to ' + label);
+}
+
+// Restore saved OS
+(function(){
+ try{
+  const saved = localStorage.getItem('bmcp-os');
+  if(saved && ['mac','win','linux'].includes(saved)) setOS(saved);
+ }catch(e){}
+})();
+
+// Screen reader live region
+function announce(msg){
+ let r = document.getElementById('sr-live');
+ if(!r){
+  r = document.createElement('div');
+  r.id = 'sr-live';
+  r.setAttribute('aria-live','polite');
+  r.setAttribute('aria-atomic','true');
+  r.style.cssText = 'position:fixed;left:-9999px;width:1px;height:1px;overflow:hidden;';
+  document.body.appendChild(r);
+ }
+ r.textContent = '';
+ setTimeout(()=>{ r.textContent = msg; }, 50);
+}
+
+/* ═══════════════════════════════════════════════
+  ACCORDION (TROUBLESHOOTING)
+═══════════════════════════════════════════════ */
+function toggleIssue(issue){
+ if(issue.dataset.animating === '1') return;
+ const body  = issue.querySelector('.issuebody');
+ const header = issue.querySelector('.issueh');
+ const isOpen = issue.classList.contains('open');
+ issue.dataset.animating = '1';
+ const done = ()=>{ issue.dataset.animating = '0'; };
+
+ if(isOpen){
+  body.style.maxHeight = body.scrollHeight + 'px';
+  void body.offsetHeight;
+  body.style.maxHeight  = '0';
+  body.style.padding   = '0 14px';
+  body.style.borderColor = 'transparent';
+  issue.classList.remove('open');
+  header.setAttribute('aria-expanded','false');
+  setTimeout(done, 340);
+ } else {
+  // Measure closed
+  body.style.visibility = 'hidden';
+  body.style.maxHeight = 'none';
+  body.style.padding  = '12px 14px';
+  const h = body.scrollHeight;
+  body.style.maxHeight = '0';
+  body.style.padding  = '0 14px';
+  body.style.visibility = '';
+  void body.offsetHeight;
+  issue.classList.add('open');
+  header.setAttribute('aria-expanded','true');
+  body.style.maxHeight  = h + 'px';
+  body.style.padding   = '12px 14px';
+  body.style.borderColor = 'var(--border)';
+  const onEnd = ()=>{
+   body.style.maxHeight = ''; // release so inner tab-switches can grow it
+   body.removeEventListener('transitionend', onEnd);
+   done();
+  };
+  body.addEventListener('transitionend', onEnd);
+  setTimeout(done, 400);
+ }
+}
+
+// Keyboard support
+document.addEventListener('keydown', e=>{
+ if((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('issueh')){
+  e.preventDefault();
+  toggleIssue(e.target.closest('.issue'));
+ }
+});
+
+// Init ARIA on open accordion
+document.querySelectorAll('.issue').forEach(issue=>{
+ const h = issue.querySelector('.issueh');
+ if(h) h.setAttribute('aria-expanded', issue.classList.contains('open') ? 'true' : 'false');
+});
+
+/* ═══════════════════════════════════════════════
+  COPY BUTTONS — injected into every .cb and .term
+═══════════════════════════════════════════════ */
+document.querySelectorAll('.cb, .term').forEach(block=>{
+ const pre = block.querySelector('pre');
+ if(!pre) return;
+ block.style.position = 'relative';
+ const btn = document.createElement('button');
+ btn.type = 'button';
+ btn.className = 'cb-copy';
+ btn.setAttribute('aria-label', 'Copy code');
+ btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>COPY</span>';
+ btn.addEventListener('click', ()=>{
+  const text = (pre.innerText || pre.textContent).trim();
+  const finish = ok=>{
+   btn.querySelector('span').textContent = ok ? 'COPIED' : 'FAILED';
+   btn.classList.toggle('copied', ok);
+   setTimeout(()=>{
+    btn.querySelector('span').textContent = 'COPY';
+    btn.classList.remove('copied');
+   }, 2200);
+  };
+  if(navigator.clipboard){
+   navigator.clipboard.writeText(text).then(()=>finish(true)).catch(()=>finish(false));
+  } else {
+   const ta = Object.assign(document.createElement('textarea'),{
+    value: text,
+    style: 'position:fixed;left:-9999px;opacity:0;'
+   });
+   document.body.appendChild(ta);
+   ta.select();
+   finish(document.execCommand('copy'));
+   document.body.removeChild(ta);
+  }
+ });
+ block.appendChild(btn);
+});
+
+/* ═══════════════════════════════════════════════
+  SCROLL SPY — topmost-visible section wins
+═══════════════════════════════════════════════ */
+const navLinks2 = Array.from(document.querySelectorAll('.ni[href^="#"]'));
+const linkedIds = new Set(navLinks2.map(n => n.getAttribute('href').slice(1)));
+const spyTargets = Array.from(document.querySelectorAll('[id]')).filter(el => linkedIds.has(el.id));
+const navItems  = document.querySelectorAll('.ni');
+const visSet   = new Set();
+
+const spy = new IntersectionObserver(entries=>{
+ entries.forEach(e => { e.isIntersecting ? visSet.add(e.target) : visSet.delete(e.target); });
+ if(!visSet.size) return;
+ let winner = null, best = Infinity;
+ visSet.forEach(el=>{
+  const t = el.getBoundingClientRect().top;
+  if(t >= 0 && t < best){ best = t; winner = el; }
+ });
+ if(!winner) winner = [...visSet][0];
+ navItems.forEach(n => n.classList.toggle('active', n.getAttribute('href') === '#' + winner.id));
+}, {rootMargin:'-8% 0px -70% 0px', threshold:0});
+
+spyTargets.forEach(s => spy.observe(s));
+
+/* ═══════════════════════════════════════════════
+  CLOSE SIDEBAR ON NAV CLICK (MOBILE)
+═══════════════════════════════════════════════ */
+document.querySelectorAll('.ni').forEach(link=>{
+ link.addEventListener('click', ()=>{ if(isMobile()) closeSidebar(); });
+});
+
+/* ═══════════════════════════════════════════════
+  LIVE GITHUB STAR COUNT
+  Fetches from GitHub API — graceful fallback to "17K+"
+═══════════════════════════════════════════════ */
+(function fetchGitHubStars(){
+ const targets = document.querySelectorAll('[data-gh-stars]');
+ if(!targets.length) return;
+ const CACHE_KEY = 'bmcp-gh-stars';
+ const CACHE_TTL = 60 * 60 * 1000; // 1 hour
+
+ function fmt(n){
+  if(n >= 1000) return (n/1000).toFixed(1).replace('.0','') + 'K+';
+  return n.toLocaleString() + '+';
+ }
+
+ function apply(val){
+  targets.forEach(el => { el.textContent = '★ ' + val; });
+ }
+
+ // Serve from cache if fresh
+ try{
+  const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+  if(cached && Date.now() - cached.ts < CACHE_TTL){
+   apply(fmt(cached.stars));
+   return;
+  }
+ }catch(e){}
+
+ // Fetch live count (no auth token required for public repos under rate limit)
+ fetch('https://api.github.com/repos/ahujasid/blender-mcp', {
+  headers: { 'Accept': 'application/vnd.github.v3+json' },
+  signal: AbortSignal.timeout ? AbortSignal.timeout(5000) : undefined
+ })
+ .then(r => r.ok ? r.json() : null)
+ .then(data => {
+  if(data && data.stargazers_count != null){
+   const stars = data.stargazers_count;
+   apply(fmt(stars));
+   try{ localStorage.setItem(CACHE_KEY, JSON.stringify({stars, ts: Date.now()})); }catch(e){}
+  } else {
+   apply('17K+');
+  }
+ })
+ .catch(() => apply('17K+'));
+})();
+
+</script>
+
+</body>
+</html>
